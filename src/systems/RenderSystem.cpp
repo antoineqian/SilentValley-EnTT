@@ -18,4 +18,15 @@ void RenderSystem::draw(entt::registry& registry, sf::RenderWindow& window){
 	{
 	   window.draw(layer);
     });
+    
+    registry.view<sf::Sprite>().each([&](auto& sprite)
+	{
+	   window.draw(sprite);
+    });
+
+    // auto view = registry.view<MapLayer>() | registry.view<sf::Sprite>();
+    // view.each([&](auto& e)
+	// {
+	//    window.draw(e);
+    // });
 };

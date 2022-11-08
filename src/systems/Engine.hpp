@@ -21,9 +21,10 @@ public:
     window.setFramerateLimit(60); // Max rate is 60 frames per second
 
     TmxParser parser;
-    parser.loadMap("assets/map/mainMap.tmx", registry);
+    parser.loadMap("assets/map/mainMap.tmx", registry, renderSystem);
     update(window);
     }
+    
     void update(sf::RenderWindow& window)
     {
     // Game loop
