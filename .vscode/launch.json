@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "mygame (LLDB extension)",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/build/silentValley",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"externalConsole": true,
+			"preLaunchTask": "build",
+			"MIMode": "lldb"}
+    ]
+}

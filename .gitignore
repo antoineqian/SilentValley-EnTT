@@ -1,0 +1,7 @@
+build/
+# Precompiled Headers
+*.gch
+*.pch
+
+cmake/
+.DS_Store
