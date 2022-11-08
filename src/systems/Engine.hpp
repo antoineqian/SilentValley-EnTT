@@ -3,12 +3,20 @@
 #include "../constants.hpp"
 #include <SFML/Graphics.hpp>
 #include "RenderSystem.hpp"
+#include "../components/Moving.hpp"
+#include "../components/PlayerController.hpp"
+#include "ISystem.hpp"
+#include "PlayerControlSystem.hpp"
+#include <memory>
+using std::make_unique;
 
 class Engine
 {
 public:
     void activate()
     {
+    
+    updateSystems.emplace_back(make_unique<PlayerControlSystem>());
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
     // and an std::string with the window title
@@ -22,9 +30,33 @@ public:
 
     TmxParser parser;
     parser.loadMap("assets/map/mainMap.tmx", registry, renderSystem);
+
+    addPlayer("assets/complete_player.png");
+
     update(window);
     }
     
+    void addPlayer(string filePath){
+        auto entity = registry.create();
+
+        renderSystem.addTextureFromPath(filePath);
+        auto& texture = renderSystem.getTextureFromPath(filePath);
+        auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
+        sprite.setTexture(texture);
+        sprite.setPosition(WINDOW_WIDTH / 2,WINDOW_HEIGHT / 2);
+
+        // auto pPlayer = make_shared<Player>(
+        //     WINDOW_WIDTH / 2,
+        //     WINDOW_HEIGHT / 2,
+        //     constants::layers.at("main"),
+        //     "Player");
+
+        registry.emplace<PlayerController>(entity);
+        registry.emplace<Moving>(entity, sf::Vector2f(0.f, 0.f));
+
+        // registry.emplace<Animated>(entity);
+    }
+
     void update(sf::RenderWindow& window)
     {
     // Game loop
@@ -51,7 +83,11 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
             window.close();
 
-
+        for (auto& sys : updateSystems)
+		{
+			sys->update(registry);
+		}
+        
         renderSystem.draw(registry, window);
 
         // Calculate the updated graphics
@@ -60,5 +96,7 @@ public:
     }
     private:
     RenderSystem renderSystem;
+    std::vector<std::unique_ptr<IUpdateSystem>> updateSystems;
+
     entt::registry registry;
 };

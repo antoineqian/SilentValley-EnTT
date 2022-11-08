@@ -30,3 +30,8 @@ void RenderSystem::draw(entt::registry& registry, sf::RenderWindow& window){
 	//    window.draw(e);
     // });
 };
+
+
+// void update(entt::DefaultRegistry& registry, float dt) {
+
+// }
