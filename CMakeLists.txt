@@ -25,12 +25,13 @@ target_link_libraries(silentValleyLib
     /Library/Frameworks/sfml-window.framework/sfml-window
     /Library/Frameworks/sfml-graphics.framework/sfml-graphics
     /Library/Frameworks/sfml-audio.framework/sfml-audio
-    # /usr/local/lib/libtmxlite.a
+    /usr/local/lib/libtmxlite.a
 )
 
 target_include_directories(silentValleyLib PUBLIC
-    # ./external/tmxlite/tmxlite/include
-    # ./external/entt/src/entt/
+    # ./external
+    ./external/tmxlite/tmxlite/include
+    ./external/entt/src/entt/
 )
 
 add_executable(silentValley src/main.cpp)
