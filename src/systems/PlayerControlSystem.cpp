@@ -5,16 +5,26 @@ using std::cout;
 
 sf::Vector2f processVelocity();
 
+// void PlayerControlSystem::update(entt::registry& registry){
+//     registry.view<Moving, PlayerController, sf::Sprite>().each([](auto& moving, auto& controller, auto& sprite)
+//         {
+//             moving.velocity = processVelocity();
+//             sprite.setPosition(moving.velocity.x, moving.velocity.y);
+//         });
+// }
 
-void PlayerControlSystem::update(entt::registry& registry){
-    registry.view<Moving, PlayerController, sf::Sprite>().each([](auto& moving, auto& controller, auto& sprite)
+void PlayerControlSystem::update(entt::registry &registry)
+{
+    registry.view<Moving, PlayerController, Animated>().each(
+        [](auto &moving, auto &controller, auto &animated)
         {
             moving.velocity = processVelocity();
-            sprite.setPosition(moving.velocity.x, moving.velocity.y);
+            animated.animatedSprite.move(moving.velocity);
         });
 }
 
-sf::Vector2f processVelocity(){
+sf::Vector2f processVelocity()
+{
     sf::Vector2f velocity;
     // bool noKeyWasPressed = true;
     // sf::Time frameTime = frameClock.restart();
@@ -31,7 +41,7 @@ sf::Vector2f processVelocity(){
         // if (hitBox.left >= 0)
         velocity.x = -PLAYER_SPEED;
         // else
-            // velocity.x = 0;
+        // velocity.x = 0;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
@@ -43,7 +53,7 @@ sf::Vector2f processVelocity(){
         // if (hitBox.left + hitBox.width <= constants::window_width)
         velocity.x = PLAYER_SPEED;
         // else
-            // velocity.x = 0;
+        // velocity.x = 0;
     }
     else
     {

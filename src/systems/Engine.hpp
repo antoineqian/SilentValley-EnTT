@@ -7,7 +7,9 @@
 #include "../components/PlayerController.hpp"
 #include "ISystem.hpp"
 #include "PlayerControlSystem.hpp"
+#include "AnimationSystem.hpp"
 #include <memory>
+#include "../animation/AnimationAdapter.hpp"
 using std::make_unique;
 
 class Engine
@@ -15,35 +17,43 @@ class Engine
 public:
     void activate()
     {
-    
-    updateSystems.emplace_back(make_unique<PlayerControlSystem>());
-    // Create the game's window using an object of class RenderWindow
-    // The constructor takes an SFML 2D vector with the window dimensions
-    // and an std::string with the window title
-    // The SFML code is in the sf namespace
-    sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
-                                 "Silent Valley Game"};
 
-    // Limit the framerate
-    // This allows other processes to run and reduces power consumption
-    window.setFramerateLimit(60); // Max rate is 60 frames per second
+        updateSystems.emplace_back(make_unique<PlayerControlSystem>());
+        updateSystems.emplace_back(make_unique<AnimationSystem>());
 
-    TmxParser parser;
-    parser.loadMap("assets/map/mainMap.tmx", registry, renderSystem);
+        // Create the game's window using an object of class RenderWindow
+        // The constructor takes an SFML 2D vector with the window dimensions
+        // and an std::string with the window title
+        // The SFML code is in the sf namespace
+        sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
+                                "Silent Valley Game"};
 
-    addPlayer("assets/complete_player.png");
+        // Limit the framerate
+        // This allows other processes to run and reduces power consumption
+        window.setFramerateLimit(60); // Max rate is 60 frames per second
 
-    update(window);
+        TmxParser parser;
+        parser.loadMap("assets/map/mainMap.tmx", registry, renderSystem);
+
+        addPlayer("assets/complete_player.png");
+
+        update(window);
     }
-    
-    void addPlayer(string filePath){
+
+    void addPlayer(string filePath)
+    {
         auto entity = registry.create();
 
         renderSystem.addTextureFromPath(filePath);
-        auto& texture = renderSystem.getTextureFromPath(filePath);
-        auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
-        sprite.setTexture(texture);
-        sprite.setPosition(WINDOW_WIDTH / 2,WINDOW_HEIGHT / 2);
+        auto &texture = renderSystem.getTextureFromPath(filePath);
+
+        AnimatedSprite animatedSprite(sf::seconds(0.2), true, true);
+        const auto &animations = AnimationAdapter::getAnimations(texture);
+        auto currentAnimation = animations.at("down_walking");
+        animatedSprite.setAnimation(currentAnimation);
+        animatedSprite.setPosition(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+        Animated animatedComponent(animatedSprite, animations, currentAnimation);
+        registry.emplace<Animated>(entity, animatedComponent);
 
         // auto pPlayer = make_shared<Player>(
         //     WINDOW_WIDTH / 2,
@@ -57,44 +67,45 @@ public:
         // registry.emplace<Animated>(entity);
     }
 
-    void update(sf::RenderWindow& window)
+    void update(sf::RenderWindow &window)
     {
-    // Game loop
-    // Clear the screen
-    // Check for user input
-    // Calculate the updated graphics
-    // Display the updated graphics
-    while (window.isOpen())
-    {
+        // Game loop
         // Clear the screen
-        window.clear(sf::Color::Black);
-
-        // Check for any events since the last loop iteration
-        sf::Event event;
-
-        // If the user pressed "Escape", or clicked on "close", we close the window
-        // This will terminate the program
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-            window.close();
-
-        for (auto& sys : updateSystems)
-		{
-			sys->update(registry);
-		}
-        
-        renderSystem.draw(registry, window);
-
+        // Check for user input
         // Calculate the updated graphics
-        window.display();
+        // Display the updated graphics
+        while (window.isOpen())
+        {
+            // Clear the screen
+            window.clear(sf::Color::Black);
+
+            // Check for any events since the last loop iteration
+            sf::Event event;
+
+            // If the user pressed "Escape", or clicked on "close", we close the window
+            // This will terminate the program
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+                window.close();
+
+            for (auto &sys : updateSystems)
+            {
+                sys->update(registry);
+            }
+
+            renderSystem.draw(registry, window);
+
+            // Calculate the updated graphics
+            window.display();
+        }
     }
-    }
-    private:
+
+private:
     RenderSystem renderSystem;
     std::vector<std::unique_ptr<IUpdateSystem>> updateSystems;
 

@@ -103,6 +103,12 @@
         "filesystem": "cpp",
         "__functional_03": "cpp",
         "future": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "execution": "cpp",
+        "*.ipp": "cpp",
+        "csignal": "cpp",
+        "ranges": "cpp",
+        "shared_mutex": "cpp",
+        "span": "cpp"
     }
 }

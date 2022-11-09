@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "../components/Moving.hpp"
 #include "../components/PlayerController.hpp"
+#include "../components/Animated.hpp"
 #include "../constants.hpp"
 
 class PlayerControlSystem  : public IUpdateSystem {
