@@ -5,9 +5,12 @@
 #include "RenderSystem.hpp"
 #include "../components/Moving.hpp"
 #include "../components/PlayerController.hpp"
+#include "../components/Position.hpp"
 #include "ISystem.hpp"
 #include "PlayerControlSystem.hpp"
 #include "AnimationSystem.hpp"
+#include "CollisionSystem.hpp"
+#include "MovingSystem.hpp"
 #include <memory>
 #include "../animation/AnimationAdapter.hpp"
 using std::make_unique;
@@ -19,7 +22,9 @@ public:
     {
 
         updateSystems.emplace_back(make_unique<PlayerControlSystem>());
+        updateSystems.emplace_back(make_unique<MovingSystem>());
         updateSystems.emplace_back(make_unique<AnimationSystem>());
+        updateSystems.emplace_back(make_unique<CollisionSystem>());
 
         // Create the game's window using an object of class RenderWindow
         // The constructor takes an SFML 2D vector with the window dimensions
@@ -51,20 +56,13 @@ public:
         const auto &animations = AnimationAdapter::getAnimations(texture);
         auto currentAnimation = animations.at("down_walking");
         animatedSprite.setAnimation(currentAnimation);
-        animatedSprite.setPosition(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+        auto position = sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+        animatedSprite.setPosition(position);
         Animated animatedComponent(animatedSprite, animations, currentAnimation);
         registry.emplace<Animated>(entity, animatedComponent);
-
-        // auto pPlayer = make_shared<Player>(
-        //     WINDOW_WIDTH / 2,
-        //     WINDOW_HEIGHT / 2,
-        //     constants::layers.at("main"),
-        //     "Player");
-
+        registry.emplace<Position>(entity, position);
         registry.emplace<PlayerController>(entity);
         registry.emplace<Moving>(entity, sf::Vector2f(0.f, 0.f));
-
-        // registry.emplace<Animated>(entity);
     }
 
     void update(sf::RenderWindow &window)

@@ -1,17 +1,13 @@
 #include "PlayerControlSystem.hpp"
 
-#include <iostream>
-using std::cout;
-
 sf::Vector2f processVelocity();
 
 void PlayerControlSystem::update(entt::registry &registry)
 {
-    registry.view<Moving, PlayerController, Animated>().each(
-        [](auto &moving, auto &controller, auto &animated)
+    registry.view<Moving, PlayerController>().each(
+        [](auto &moving, auto &controller)
         {
             moving.velocity = processVelocity();
-            animated.animatedSprite.move(moving.velocity);
         });
 }
 

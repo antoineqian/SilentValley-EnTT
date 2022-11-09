@@ -1,6 +1,7 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 
-struct Body
+struct Position
 {
     sf::Vector2f position;
 };

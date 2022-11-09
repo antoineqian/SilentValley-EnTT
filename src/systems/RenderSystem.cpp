@@ -26,14 +26,4 @@ void RenderSystem::draw(entt::registry &registry, sf::RenderWindow &window)
     registry.view<Animated>().each(
         [&](auto &animated)
         { window.draw(animated.animatedSprite); });
-
-    // auto view = registry.view<MapLayer>() | registry.view<sf::Sprite>();
-    // view.each([&](auto& e)
-    // {
-    //    window.draw(e);
-    // });
 };
-
-// void update(entt::DefaultRegistry& registry, float dt) {
-
-// }

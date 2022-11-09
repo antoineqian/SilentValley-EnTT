@@ -1,5 +1,6 @@
 #include <tmxlite/Map.hpp>
 #include "../../external/Layer.hpp"
+#include "../components/Position.hpp"
 #include <SFML/Graphics.hpp>
 #include "RenderSystem.hpp"
 #include <memory>
@@ -10,7 +11,7 @@ using std::unique_ptr;
 class TmxParser
 {
 public:
-    void loadMap(string filepath, entt::registry& registry, RenderSystem &renderSystem)
+    void loadMap(string filepath, entt::registry &registry, RenderSystem &renderSystem)
     {
         tmx::Map gameMap;
         gameMap.load(filepath);
@@ -37,25 +38,15 @@ public:
                 for (const auto &object : objectLayer.getObjects())
                 {
                     auto entity = registry.create();
-                    
+
                     const auto pos = object.getPosition();
                     auto tID = object.getTileID();
                     auto path = objectTileSet->getTile(tID)->imagePath;
                     renderSystem.addTextureFromPath(path);
                     auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
-
                     sprite.setTexture(renderSystem.getTextureFromPath(path));
                     sprite.setPosition(pos.x, pos.y);
-
-            //         // auto entity = registry.create();
-            //         // if (object.getClass() == string('Speaker'))
-            //         // {
-            //         //     enttMgr.registry.emplace<Speaker>(entity, 1, sprite, object.getName());
-            //         // }
-            //         // else
-            //         // {
-            //         //     enttMgr.registry.emplace<StaticEntity>(entity, 1, sprite, object.getName());
-            //         // }
+                    registry.emplace<Position>(entity, sf::Vector2f(pos.x, pos.y));
                 }
             }
         }
