@@ -1,5 +1,4 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 // TODO: constants::window_width/window_height are actually hardcoded from the map size (loaded in main)
 // We should add objects like vegetation to prevent the player going anywhere near the limit
@@ -14,4 +13,7 @@ static constexpr int TILE_SIZE{16};
 static constexpr float PLAYER_SPEED{1.0f};
 static constexpr int PLAYER_HEIGHT{20};
 
-#endif // CONSTANTS_H
+inline sf::FloatRect shrinkToHitBox(sf::FloatRect box)
+{
+    return {box.left + box.width * 0.1f, box.top + box.height * 0.7f, box.width * 0.8f, box.height * 0.3f};
+}
