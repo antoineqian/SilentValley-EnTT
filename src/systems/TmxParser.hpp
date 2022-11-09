@@ -1,6 +1,7 @@
 #include <tmxlite/Map.hpp>
 #include "../../external/Layer.hpp"
 #include "../components/Position.hpp"
+#include "../components/Sprite.hpp"
 #include <SFML/Graphics.hpp>
 #include "RenderSystem.hpp"
 #include <memory>
@@ -43,9 +44,10 @@ public:
                     auto tID = object.getTileID();
                     auto path = objectTileSet->getTile(tID)->imagePath;
                     renderSystem.addTextureFromPath(path);
-                    auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
+                    sf::Sprite sprite;
                     sprite.setTexture(renderSystem.getTextureFromPath(path));
                     sprite.setPosition(pos.x, pos.y);
+                    registry.emplace<Sprite>(entity, Sprite(sprite));
                     registry.emplace<Position>(entity, sf::Vector2f(pos.x, pos.y));
                 }
             }

@@ -19,11 +19,11 @@ void RenderSystem::draw(entt::registry &registry, sf::RenderWindow &window)
         [&](auto &layer)
         { window.draw(layer); });
 
-    registry.view<sf::Sprite>().each(
+    registry.view<Sprite>().each(
         [&](auto &sprite)
         { window.draw(sprite); });
 
     registry.view<Animated>().each(
         [&](auto &animated)
-        { window.draw(animated.animatedSprite); });
+        { window.draw(animated); });
 };

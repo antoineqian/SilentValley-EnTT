@@ -3,18 +3,18 @@
 void CollisionSystem::update(entt::registry &registry)
 {
     // registry.view<Collision, PlayerController, Position>().each(
-    //     [&registry](auto entity1, auto &collision1)
+    //     [&registry](auto entity1, auto &collision1, auto &position1)
     //     {
-    //         // registry.view<Collision>().each(
-    //         //     [](auto entity2, auto &collision2)
-    //         //     {
-    //         //         // if (entity1 != entity2)
-    //         //         // handleCollision(collision1, collision2);
-    //         //     });
+    //         registry.view<Collision>().each(
+    //             [](auto entity2, auto &collision2)
+    //             {
+    //                 if (entity1 != entity2)
+    //                 // handleCollision(collision1, collision2);
+    //             });
     //     });
 }
 
-// void doHandleCollisions(shared_ptr<MovingEntity> e1, shared_ptr<const Entity> e2)
+// void handleCollision(Collision e1, Collision e2, Position p1)
 // {
 //     auto e1Box = e1->getHitBox();
 //     auto e2Box = e2->getHitBox();
