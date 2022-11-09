@@ -1,6 +1,5 @@
 #include <tmxlite/Map.hpp>
 #include "../../external/Layer.hpp"
-#include "../components/Position.hpp"
 #include "../components/Collision.hpp"
 #include "../constants.hpp"
 #include <SFML/Graphics.hpp>
@@ -48,7 +47,6 @@ public:
                     auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
                     sprite.setTexture(renderSystem.getTextureFromPath(path));
                     sprite.setPosition(pos.x, pos.y);
-                    registry.emplace<Position>(entity, sf::Vector2f(pos.x, pos.y));
                     registry.emplace<Collision>(entity, shrinkToHitBox(sprite.getGlobalBounds()));
                 }
             }

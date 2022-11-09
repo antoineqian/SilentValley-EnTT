@@ -5,7 +5,6 @@
 #include "../components/Moving.hpp"
 #include "../components/PlayerController.hpp"
 #include "../components/Animated.hpp"
-#include "../components/Position.hpp"
 #include "../constants.hpp"
 
 class PlayerControlSystem : public IUpdateSystem

@@ -6,7 +6,6 @@
 #include "../components/Moving.hpp"
 #include "../components/PlayerController.hpp"
 #include "../components/Collision.hpp"
-#include "../components/Position.hpp"
 #include "ISystem.hpp"
 #include "PlayerControlSystem.hpp"
 #include "AnimationSystem.hpp"
@@ -57,11 +56,9 @@ public:
         const auto &animations = AnimationAdapter::getAnimations(texture);
         auto currentAnimation = animations.at("down_walking");
         animatedSprite.setAnimation(currentAnimation);
-        auto position = sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-        animatedSprite.setPosition(position);
+        animatedSprite.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
         Animated animatedComponent(animatedSprite, animations, currentAnimation);
         registry.emplace<Animated>(entity, animatedComponent);
-        registry.emplace<Position>(entity, position);
         registry.emplace<PlayerController>(entity);
         registry.emplace<Moving>(entity, sf::Vector2f(0.f, 0.f));
         registry.emplace<Collision>(entity, shrinkToHitBox(animatedSprite.getGlobalBounds()));
