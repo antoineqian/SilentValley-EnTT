@@ -4,6 +4,7 @@ SoundSystem::SoundSystem(entt::registry &registry)
 {
     // entt::observer observer{registry, entt::collector.update<Speaker>()};
     observer.connect(registry, entt::collector.update<Speaker>());
+    music.openFromFile("assets/sounds/08. Surrounded.flac");
 }
 
 void SoundSystem::update(entt::registry &registry)

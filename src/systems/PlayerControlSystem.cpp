@@ -1,5 +1,7 @@
 #include "PlayerControlSystem.hpp"
 
+#include <iostream>
+
 sf::Vector2f processVelocity();
 
 void PlayerControlSystem::update(entt::registry &registry)
@@ -7,16 +9,31 @@ void PlayerControlSystem::update(entt::registry &registry)
     // Keyboard
     // Direction
     sf::Vector2f velocity;
+    Direction direction{Direction::nodir};
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+    {
         velocity.x = -PLAYER_SPEED;
+        direction = Direction::left;
+    }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+    {
         velocity.x = PLAYER_SPEED;
+        direction = Direction::right;
+    }
     else
         velocity.x = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+    {
         velocity.y = -PLAYER_SPEED;
+        direction = Direction::up;
+    }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+
+    {
         velocity.y = PLAYER_SPEED;
+        direction = Direction::down;
+    }
     else
         velocity.y = 0;
 
@@ -26,29 +43,65 @@ void PlayerControlSystem::update(entt::registry &registry)
         velocity.y /= 1.4;
     }
     // Action
+    bool spaceCmd{false};
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
     {
-        // auto speakers = getSpeakers();
-        // bool useSpeakers = false;
-        // for (auto &&speaker : speakers)
-        // {
-        //     if (getPlayer()->getFacePosition().intersects(speaker->getHitBox()))
-        //         useSpeakers = true;
-        // }
-
-        // if (useSpeakers)
-        // {
-        //     for (auto &&speaker : speakers)
-        //     {
-        //         speaker->switchState();
-        //     }
-        // }
+        sf::Time elapsed = actionTimer.getElapsedTime();
+        if (elapsed.asSeconds() > 1.f)
+        {
+            spaceCmd = true;
+            actionTimer.restart();
+        }
     }
 
-    registry.view<Moving, PlayerController>()
+    bool useSpeakers = false;
+    registry.view<Moving, Collision, PlayerController>()
         .each(
-            [&velocity](auto &moving, auto &controller)
+            [&velocity, &useSpeakers, &spaceCmd, &registry, &direction](auto &moving, auto &collision, auto &controller)
             {
                 moving.velocity = velocity;
+                if (magic_enum::enum_integer(direction) != magic_enum::enum_integer(Direction::nodir))
+                {
+                    moving.direction = direction;
+                }
+                if (spaceCmd)
+                {
+                    auto faceBox = getFacePosition(collision.hitBox, moving.direction);
+                    registry.view<Speaker, Collision>().each(
+                        [&useSpeakers, &faceBox](auto &speaker, auto &collision2)
+                        {
+                            if (faceBox.intersects(collision2.hitBox))
+                            {
+                                // std::cout << "Using speakers \n";
+                                useSpeakers = true;
+                                // break;
+                            }
+                        });
+                }
             });
+
+    if (useSpeakers)
+    {
+        registry.view<Speaker>().each(
+            [](auto &speaker)
+            {
+                speaker.isActive = !speaker.isActive;
+                std::cout << std::boolalpha << speaker.isActive << "\n ";
+            });
+    }
+}
+
+sf::FloatRect getFacePosition(sf::FloatRect box, Direction direction)
+{
+    switch (magic_enum::enum_integer(direction))
+    {
+    case magic_enum::enum_integer(Direction::up):
+        return {box.left, box.top - 8, box.width, 8};
+    case magic_enum::enum_integer(Direction::down):
+        return {box.left, box.top + box.height, box.width, 8};
+    case magic_enum::enum_integer(Direction::left):
+        return {box.left - 8, box.top, 8, box.width};
+    case magic_enum::enum_integer(Direction::right):
+        return {box.left + box.width, box.top, 8, box.width};
+    }
 }
