@@ -24,7 +24,7 @@ void handleCollision(Collision e1, Collision e2, Animated &a1)
     auto e2Box = e2.hitBox;
     if (e2Box.intersects(e1Box))
     {
-        std::cout << "Intersecting \n";
+        // std::cout << "Intersecting \n";
         auto eTop = e2Box.top;
         auto eBottom = e2Box.top + e2Box.height;
         auto eLeft = e2Box.left;

@@ -19,11 +19,22 @@ void RenderSystem::draw(entt::registry &registry, sf::RenderWindow &window)
         [&](auto &layer)
         { window.draw(layer); });
 
-    registry.view<sf::Sprite>().each(
-        [&](auto &sprite)
-        { window.draw(sprite); });
+    registry.sort<Collision>(
+        [](const auto &lhs, const auto &rhs)
+        { return (lhs.hitBox.top + lhs.hitBox.height < rhs.hitBox.top + rhs.hitBox.height); });
 
-    registry.view<Animated>().each(
-        [&](auto &animated)
-        { window.draw(animated.animatedSprite); });
+    registry.view<Collision>().each(
+        [&](auto entity, auto &col)
+        {
+            if (registry.any_of<sf::Sprite>(entity))
+            {
+                auto &sprite = registry.get<sf::Sprite>(entity);
+                window.draw(sprite);
+            }
+            else if (registry.any_of<Animated>(entity))
+            {
+                auto &animated = registry.get<Animated>(entity);
+                window.draw(animated.animatedSprite);
+            }
+        });
 };

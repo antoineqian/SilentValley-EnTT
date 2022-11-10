@@ -6,6 +6,7 @@
 #include <entt.hpp>
 #include "../../external/Layer.hpp"
 #include "../components/Moving.hpp"
+#include "../components/Collision.hpp"
 #include "../components/Animated.hpp"
 using std::string;
 
