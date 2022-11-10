@@ -24,7 +24,6 @@ void handleCollision(Collision e1, Collision e2, Animated &a1)
     auto e2Box = e2.hitBox;
     if (e2Box.intersects(e1Box))
     {
-        // std::cout << "Intersecting \n";
         auto eTop = e2Box.top;
         auto eBottom = e2Box.top + e2Box.height;
         auto eLeft = e2Box.left;
@@ -45,7 +44,6 @@ void handleCollision(Collision e1, Collision e2, Animated &a1)
 
         // The direction of the collision is defined by which Overlap is
         // the minimum overlap greater than 0.
-
         if (BTOverlap > 0 && BTOverlap < RLOverlap && BTOverlap < LROverlap && BTOverlap < TBOverlap) // Coming mainly up, even if some diagonal movement is involved
         {
             // std::cout << "Collision moving up\n";
@@ -53,7 +51,6 @@ void handleCollision(Collision e1, Collision e2, Animated &a1)
                    - 12 /**Diff between top of sprite bounds and top of player bounds*/;
 
             a1.animatedSprite.setPosition({p1.x, newY});
-            // p1.y = newY
         }
         else if (TBOverlap > 0 && TBOverlap < RLOverlap && TBOverlap < LROverlap && TBOverlap < BTOverlap) // Coming mainly down
         {

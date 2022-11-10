@@ -1,6 +1,7 @@
 #include <tmxlite/Map.hpp>
 #include "../../external/Layer.hpp"
 #include "../components/Collision.hpp"
+#include "../components/Speaker.hpp"
 #include "../constants.hpp"
 #include <SFML/Graphics.hpp>
 #include "RenderSystem.hpp"
@@ -39,7 +40,6 @@ public:
                 for (const auto &object : objectLayer.getObjects())
                 {
                     auto entity = registry.create();
-
                     const auto pos = object.getPosition();
                     auto tID = object.getTileID();
                     auto path = objectTileSet->getTile(tID)->imagePath;
@@ -48,6 +48,10 @@ public:
                     sprite.setTexture(renderSystem.getTextureFromPath(path));
                     sprite.setPosition(pos.x, pos.y);
                     registry.emplace<Collision>(entity, shrinkToHitBox(sprite.getGlobalBounds()));
+                    if (object.getClass() == string("Speaker"))
+                    {
+                        registry.emplace<Speaker>(entity);
+                    }
                 }
             }
         }

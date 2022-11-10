@@ -10,6 +10,7 @@
 #include "PlayerControlSystem.hpp"
 #include "AnimationSystem.hpp"
 #include "CollisionSystem.hpp"
+#include "SoundSystem.hpp"
 #include "MovingSystem.hpp"
 #include <memory>
 #include "../animation/AnimationAdapter.hpp"
@@ -20,11 +21,11 @@ class Engine
 public:
     void activate()
     {
-
         updateSystems.emplace_back(make_unique<PlayerControlSystem>());
         updateSystems.emplace_back(make_unique<CollisionSystem>());
         updateSystems.emplace_back(make_unique<MovingSystem>());
         updateSystems.emplace_back(make_unique<AnimationSystem>());
+        updateSystems.emplace_back(make_unique<SoundSystem>(registry));
 
         // Create the game's window using an object of class RenderWindow
         // The constructor takes an SFML 2D vector with the window dimensions
