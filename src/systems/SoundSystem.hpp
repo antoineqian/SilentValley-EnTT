@@ -12,4 +12,6 @@ public:
 private:
     sf::Music music;
     entt::observer observer;
+    entt::registry &registry;
+    void switchSoundSystem();
 };

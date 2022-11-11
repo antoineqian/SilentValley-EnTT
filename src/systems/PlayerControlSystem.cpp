@@ -72,9 +72,7 @@ void PlayerControlSystem::update(entt::registry &registry)
                         {
                             if (faceBox.intersects(collision2.hitBox))
                             {
-                                // std::cout << "Using speakers \n";
                                 useSpeakers = true;
-                                // break;
                             }
                         });
                 }
@@ -83,10 +81,10 @@ void PlayerControlSystem::update(entt::registry &registry)
     if (useSpeakers)
     {
         registry.view<Speaker>().each(
-            [](auto &speaker)
+            [&registry](entt::entity entity, auto &speaker)
             {
-                speaker.isActive = !speaker.isActive;
-                std::cout << std::boolalpha << speaker.isActive << "\n ";
+                registry.patch<Speaker>(entity, [](auto &speaker)
+                                        { speaker.isActive = !speaker.isActive; });
             });
     }
 }
@@ -104,4 +102,5 @@ sf::FloatRect getFacePosition(sf::FloatRect box, Direction direction)
     case magic_enum::enum_integer(Direction::right):
         return {box.left + box.width, box.top, 8, box.width};
     }
+    return sf::FloatRect();
 }
