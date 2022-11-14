@@ -2,12 +2,14 @@
 #include "TmxParser.hpp"
 #include "../constants.hpp"
 #include <SFML/Graphics.hpp>
-#include "RenderSystem.hpp"
 #include "../components/Moving.hpp"
 #include "../components/PlayerController.hpp"
 #include "../components/Collision.hpp"
+#include "../components/Raver.hpp"
 #include "ISystem.hpp"
+#include "RenderSystem.hpp"
 #include "PlayerControlSystem.hpp"
+#include "RaverSystem.hpp"
 #include "AnimationSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "SoundSystem.hpp"
@@ -22,6 +24,7 @@ public:
     void activate()
     {
         updateSystems.emplace_back(make_unique<PlayerControlSystem>());
+        updateSystems.emplace_back(make_unique<RaverSystem>(registry));
         updateSystems.emplace_back(make_unique<CollisionSystem>());
         updateSystems.emplace_back(make_unique<MovingSystem>());
         updateSystems.emplace_back(make_unique<AnimationSystem>());
@@ -42,14 +45,21 @@ public:
         parser.loadMap("assets/map/mainMap.tmx", registry, renderSystem);
 
         addPlayer("assets/complete_player.png");
+        addRaver(sf::Vector2f(WINDOW_WIDTH / 3, WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
+        addRaver(sf::Vector2f(WINDOW_WIDTH / 3, 2 * WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
 
         update(window);
     }
 
     void addPlayer(string filePath)
     {
-        auto entity = registry.create();
+        auto entity = createHuman(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), filePath);
+        registry.emplace<PlayerController>(entity);
+    }
 
+    entt::entity createHuman(sf::Vector2f pos, string filePath)
+    {
+        auto entity = registry.create();
         renderSystem.addTextureFromPath(filePath);
         auto &texture = renderSystem.getTextureFromPath(filePath);
 
@@ -57,12 +67,12 @@ public:
         const auto &animations = AnimationAdapter::getAnimations(texture);
         auto currentAnimation = animations.at("down_walking");
         animatedSprite.setAnimation(currentAnimation);
-        animatedSprite.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
+        animatedSprite.setPosition(pos);
         Animated animatedComponent(animatedSprite, animations, currentAnimation);
         registry.emplace<Animated>(entity, animatedComponent);
-        registry.emplace<PlayerController>(entity);
         registry.emplace<Moving>(entity, sf::Vector2f(0.f, 0.f));
         registry.emplace<Collision>(entity, shrinkToHitBox(animatedSprite.getGlobalBounds()));
+        return entity;
     }
 
     void update(sf::RenderWindow &window)
@@ -101,6 +111,12 @@ public:
             // Calculate the updated graphics
             window.display();
         }
+    }
+
+    void addRaver(sf::Vector2f pos, string filePath)
+    {
+        auto entity = createHuman(pos, filePath);
+        registry.emplace<Raver>(entity);
     }
 
 private:

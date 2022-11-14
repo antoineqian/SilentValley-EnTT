@@ -14,25 +14,25 @@ void PlayerControlSystem::update(entt::registry &registry)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         velocity.x = -PLAYER_SPEED;
-        direction = Direction::left;
+        // direction = Direction::left;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         velocity.x = PLAYER_SPEED;
-        direction = Direction::right;
+        // direction = Direction::right;
     }
     else
         velocity.x = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         velocity.y = -PLAYER_SPEED;
-        direction = Direction::up;
+        // direction = Direction::up;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
 
     {
         velocity.y = PLAYER_SPEED;
-        direction = Direction::down;
+        // direction = Direction::down;
     }
     else
         velocity.y = 0;
@@ -57,13 +57,13 @@ void PlayerControlSystem::update(entt::registry &registry)
     bool useSpeakers = false;
     registry.view<Moving, Collision, PlayerController>()
         .each(
-            [&velocity, &useSpeakers, &spaceCmd, &registry, &direction](auto &moving, auto &collision, auto &controller)
+            [&velocity, &useSpeakers, &spaceCmd, &registry](auto &moving, auto &collision, auto &controller)
             {
                 moving.velocity = velocity;
-                if (magic_enum::enum_integer(direction) != magic_enum::enum_integer(Direction::nodir))
-                {
-                    moving.direction = direction;
-                }
+                // if (magic_enum::enum_integer(direction) != magic_enum::enum_integer(Direction::nodir))
+                // {
+                //     moving.direction = direction;
+                // }
                 if (spaceCmd)
                 {
                     auto faceBox = getFacePosition(collision.hitBox, moving.direction);

@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/System/Vector2.hpp>
 
 // TODO: constants::window_width/window_height are actually hardcoded from the map size (loaded in main)
 // We should add objects like vegetation to prevent the player going anywhere near the limit
