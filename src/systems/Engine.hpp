@@ -1,11 +1,6 @@
 #include "entt.hpp"
-#include "TmxParser.hpp"
-#include "../constants.hpp"
 #include <SFML/Graphics.hpp>
-#include "../components/Moving.hpp"
-#include "../components/PlayerController.hpp"
-#include "../components/Collision.hpp"
-#include "../components/Raver.hpp"
+#include <memory>
 #include "ISystem.hpp"
 #include "RenderSystem.hpp"
 #include "PlayerControlSystem.hpp"
@@ -13,9 +8,9 @@
 #include "AnimationSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "SoundSystem.hpp"
+#include "GUISystem.hpp"
 #include "MovingSystem.hpp"
-#include <memory>
-#include "../animation/AnimationAdapter.hpp"
+#include "../managers/EntityCreator.hpp"
 using std::make_unique;
 
 class Engine
@@ -29,50 +24,18 @@ public:
         updateSystems.emplace_back(make_unique<MovingSystem>());
         updateSystems.emplace_back(make_unique<AnimationSystem>());
         updateSystems.emplace_back(make_unique<SoundSystem>(registry));
+        drawSystems.emplace_back(make_unique<RenderSystem>());
+        drawSystems.emplace_back(make_unique<GUISystem>());
 
-        // Create the game's window using an object of class RenderWindow
-        // The constructor takes an SFML 2D vector with the window dimensions
-        // and an std::string with the window title
-        // The SFML code is in the sf namespace
         sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
                                 "Silent Valley Game"};
 
-        // Limit the framerate
         // This allows other processes to run and reduces power consumption
-        window.setFramerateLimit(60); // Max rate is 60 frames per second
+        window.setFramerateLimit(60);
 
-        TmxParser parser;
-        parser.loadMap("assets/map/mainMap.tmx", registry, renderSystem);
-
-        addPlayer("assets/complete_player.png");
-        addRaver(sf::Vector2f(WINDOW_WIDTH / 3, WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
-        // addRaver(sf::Vector2f(WINDOW_WIDTH / 3, 2 * WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
-
+        EntityCreator creator(registry);
+        creator.createScene();
         update(window);
-    }
-
-    void addPlayer(string filePath)
-    {
-        auto entity = createHuman(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), filePath);
-        registry.emplace<PlayerController>(entity);
-    }
-
-    entt::entity createHuman(sf::Vector2f pos, string filePath)
-    {
-        auto entity = registry.create();
-        renderSystem.addTextureFromPath(filePath);
-        auto &texture = renderSystem.getTextureFromPath(filePath);
-
-        AnimatedSprite animatedSprite(sf::seconds(0.2), true, true);
-        const auto &animations = AnimationAdapter::getAnimations(texture);
-        auto currentAnimation = animations.at("down_walking");
-        animatedSprite.setAnimation(currentAnimation);
-        animatedSprite.setPosition(pos);
-        Animated animatedComponent(animatedSprite, animations, currentAnimation);
-        registry.emplace<Animated>(entity, animatedComponent);
-        registry.emplace<Moving>(entity, sf::Vector2f(0.f, 0.f));
-        registry.emplace<Collision>(entity, shrinkToHitBox(animatedSprite.getGlobalBounds()));
-        return entity;
     }
 
     void update(sf::RenderWindow &window)
@@ -84,10 +47,7 @@ public:
         // Display the updated graphics
         while (window.isOpen())
         {
-            // Clear the screen
             window.clear(sf::Color::Black);
-
-            // Check for any events since the last loop iteration
             sf::Event event;
 
             // If the user pressed "Escape", or clicked on "close", we close the window
@@ -106,23 +66,18 @@ public:
                 sys->update(registry);
             }
 
-            renderSystem.draw(registry, window);
-
+            for (auto &sys : drawSystems)
+            {
+                sys->draw(registry, window);
+            }
             // Calculate the updated graphics
             window.display();
         }
     }
 
-    void addRaver(sf::Vector2f pos, string filePath)
-    {
-        auto entity = createHuman(pos, filePath);
-        registry.emplace<Raver>(entity);
-        registry.emplace<Idle>(entity);
-    }
-
 private:
-    RenderSystem renderSystem;
     std::vector<std::unique_ptr<IUpdateSystem>> updateSystems;
+    std::vector<std::unique_ptr<IDrawSystem>> drawSystems;
 
     entt::registry registry;
 };
