@@ -17,7 +17,14 @@ CPMAddPackage(
     GIT_TAG v0.8.0
 )
 
+set(TGUI_BUILD_FRAMEWORK FALSE)
+FetchContent_Declare(
+  tgui
+  GIT_REPOSITORY https://github.com/texus/TGUI/
+  GIT_TAG 2b7610f251937cf854a362127a47a13f027457a1
+)
 
+FetchContent_MakeAvailable(tgui)
 
 target_link_libraries(silentValleyLib
     /Library/Frameworks/SFML.framework
@@ -27,6 +34,8 @@ target_link_libraries(silentValleyLib
     /Library/Frameworks/sfml-audio.framework/sfml-audio
     /usr/local/lib/libtmxlite.a
     magic_enum
+    tgui
+
 )
 
 target_include_directories(silentValleyLib PUBLIC

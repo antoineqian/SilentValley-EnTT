@@ -9,30 +9,25 @@ void PlayerControlSystem::update(entt::registry &registry)
     // Keyboard
     // Direction
     sf::Vector2f velocity;
-    Direction direction{Direction::nodir};
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         velocity.x = -PLAYER_SPEED;
-        // direction = Direction::left;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         velocity.x = PLAYER_SPEED;
-        // direction = Direction::right;
     }
     else
         velocity.x = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         velocity.y = -PLAYER_SPEED;
-        // direction = Direction::up;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
 
     {
         velocity.y = PLAYER_SPEED;
-        // direction = Direction::down;
     }
     else
         velocity.y = 0;
@@ -60,10 +55,6 @@ void PlayerControlSystem::update(entt::registry &registry)
             [&velocity, &useSpeakers, &spaceCmd, &registry](auto &moving, auto &collision, auto &controller)
             {
                 moving.velocity = velocity;
-                // if (magic_enum::enum_integer(direction) != magic_enum::enum_integer(Direction::nodir))
-                // {
-                //     moving.direction = direction;
-                // }
                 if (spaceCmd)
                 {
                     auto faceBox = getFacePosition(collision.hitBox, moving.direction);
