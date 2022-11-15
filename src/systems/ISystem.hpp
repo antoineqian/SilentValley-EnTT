@@ -11,6 +11,6 @@ public:
 class IDrawSystem
 {
 public:
-	virtual void draw(entt::registry &registry, sf::RenderWindow &window) const = 0;
+	virtual void draw(entt::registry &registry, sf::RenderWindow &window) = 0;
 	virtual ~IDrawSystem(){};
 };

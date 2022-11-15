@@ -24,14 +24,14 @@ public:
         updateSystems.emplace_back(make_unique<MovingSystem>());
         updateSystems.emplace_back(make_unique<AnimationSystem>());
         updateSystems.emplace_back(make_unique<SoundSystem>(registry));
-        drawSystems.emplace_back(make_unique<RenderSystem>());
-        drawSystems.emplace_back(make_unique<GUISystem>());
 
         sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
                                 "Silent Valley Game"};
 
         // This allows other processes to run and reduces power consumption
         window.setFramerateLimit(60);
+        drawSystems.emplace_back(make_unique<RenderSystem>());
+        drawSystems.emplace_back(make_unique<GUISystem>(registry, window));
 
         EntityCreator creator(registry);
         creator.createScene();

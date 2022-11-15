@@ -1,6 +1,6 @@
 #include "RenderSystem.hpp"
 
-void RenderSystem::draw(entt::registry &registry, sf::RenderWindow &window) const
+void RenderSystem::draw(entt::registry &registry, sf::RenderWindow &window)
 {
 
     registry.view<MapLayer>().each(
