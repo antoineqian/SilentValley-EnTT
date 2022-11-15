@@ -7,6 +7,7 @@
 #include "entt.hpp"
 #include "../../constants.hpp"
 #include "../Raver.hpp"
+#include "../../systems/SoundSystem.hpp"
 using std::make_unique;
 using std::unique_ptr;
 
@@ -33,5 +34,17 @@ struct Idle
 
     static void exit(entt::entity &entity, entt::registry &registry);
 };
+
+// //------------------------------------------------------------------------
+// // Go Drink
+// //------------------------------------------------------------------------
+// struct GoDrink
+// {
+//     static void enter(entt::entity &entity, entt::registry &registry);
+
+//     static void execute(entt::entity &entity, entt::registry &registry);
+
+//     static void exit(entt::entity &entity, entt::registry &registry);
+// };
 
 #endif

@@ -9,7 +9,7 @@ void loadChatBox(tgui::GuiBase &gui)
     chatbox->setRenderer(theme.getRenderer("ChatBox"));
     chatbox->setSize(300, 100);
     chatbox->setTextSize(18);
-    chatbox->setPosition(420, 310);
+    chatbox->setPosition(0, 0);
     chatbox->setLinesStartFromTop();
     chatbox->addLine("This is your information box ", tgui::Color::Green);
     gui.add(chatbox, "InfoBox");

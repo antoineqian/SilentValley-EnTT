@@ -48,13 +48,17 @@ sf::Vector2f seekTarget(sf::Vector2f target, sf::Vector2f position)
 
 void GoDance::enter(entt::entity &entity, entt::registry &registry)
 {
-    std::random_device rd;                          // obtain a random number from hardware
-    std::mt19937 gen(rd());                         // seed the generator
-    std::uniform_int_distribution<> distr(-96, 96); // define the range
+    auto soundArea = SoundSystem::soundArea(registry);
+    std::random_device rd;                                                                      // obtain a random number from hardware
+    std::mt19937 gen(rd());                                                                     // seed the generator
+    std::uniform_int_distribution<> distrHor(soundArea.left, soundArea.left + soundArea.width); // define the range
+    std::uniform_int_distribution<> distrVert(soundArea.top, soundArea.top + soundArea.height); // define the range
+
     auto &raver = registry.get<Raver>(entity);
 
-    raver.target = sf::Vector2f(WINDOW_WIDTH / 2.f + distr(gen),
-                                WINDOW_HEIGHT / 2.f + distr(gen));
+    raver.target = sf::Vector2f(distrHor(gen), distrVert(gen));
+
+    std::cout << "Target " << raver.target.x << " " << raver.target.y << '\n';
 }
 
 void GoDance::execute(entt::entity &entity, entt::registry &registry)
