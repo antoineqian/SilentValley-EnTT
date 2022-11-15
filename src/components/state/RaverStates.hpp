@@ -15,8 +15,6 @@ using std::unique_ptr;
 //------------------------------------------------------------------------
 struct GoDance
 {
-    bool inState{true};
-
     static void enter(entt::entity &entity, entt::registry &registry);
 
     static void execute(entt::entity &entity, entt::registry &registry);
@@ -26,9 +24,6 @@ struct GoDance
 
 struct Idle
 {
-    bool inState{true};
-    // public:
-
     static void enter(entt::entity &entity, entt::registry &registry);
 
     static void execute(entt::entity &entity, entt::registry &registry);
