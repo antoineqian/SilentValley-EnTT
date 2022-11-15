@@ -22,6 +22,9 @@ struct GoDance
     static void exit(entt::entity &entity, entt::registry &registry);
 };
 
+//------------------------------------------------------------------------
+// Do nothing
+//------------------------------------------------------------------------
 struct Idle
 {
     static void enter(entt::entity &entity, entt::registry &registry);
