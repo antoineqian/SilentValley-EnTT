@@ -11,9 +11,8 @@ void MovingSystem::update(entt::registry &registry)
             auto actualBox = sf::FloatRect{box.left, box.top + 12, TILE_SIZE, PLAYER_HEIGHT};
             collision.hitBox = shrinkToHitBox(actualBox);
 
-            // //
-            auto pos = animated.animatedSprite.getPosition();
-            std::cout << pos.x << " " << pos.y << '\n';
+            // auto pos = animated.animatedSprite.getPosition();
+            // std::cout << pos.x << " " << pos.y << '\n';
 
             Direction direction{Direction::nodir};
             if (moving.velocity.x < 0)

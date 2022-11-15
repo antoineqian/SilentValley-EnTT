@@ -16,11 +16,11 @@ using std::unique_ptr;
 //------------------------------------------------------------------------
 struct GoDance
 {
-    static void enter(entt::entity &entity, entt::registry &registry);
+    static void enter(const entt::entity &entity, entt::registry &registry);
 
-    static void execute(entt::entity &entity, entt::registry &registry);
+    static void execute(const entt::entity &entity, entt::registry &registry);
 
-    static void exit(entt::entity &entity, entt::registry &registry);
+    static void exit(const entt::entity &entity, entt::registry &registry);
 };
 
 //------------------------------------------------------------------------
@@ -28,23 +28,23 @@ struct GoDance
 //------------------------------------------------------------------------
 struct Idle
 {
-    static void enter(entt::entity &entity, entt::registry &registry);
+    static void enter(const entt::entity &entity, entt::registry &registry);
 
-    static void execute(entt::entity &entity, entt::registry &registry);
+    static void execute(const entt::entity &entity, entt::registry &registry);
 
-    static void exit(entt::entity &entity, entt::registry &registry);
+    static void exit(const entt::entity &entity, entt::registry &registry);
 };
 
+//------------------------------------------------------------------------
+// Go Drink
 // //------------------------------------------------------------------------
-// // Go Drink
-// //------------------------------------------------------------------------
-// struct GoDrink
-// {
-//     static void enter(entt::entity &entity, entt::registry &registry);
+struct GoDrink
+{
+    static void enter(const entt::entity &entity, entt::registry &registry);
 
-//     static void execute(entt::entity &entity, entt::registry &registry);
+    static void execute(const entt::entity &entity, entt::registry &registry);
 
-//     static void exit(entt::entity &entity, entt::registry &registry);
-// };
+    static void exit(const entt::entity &entity, entt::registry &registry);
+};
 
 #endif

@@ -46,7 +46,7 @@ sf::Vector2f seekTarget(sf::Vector2f target, sf::Vector2f position)
     return velocity;
 }
 
-void GoDance::enter(entt::entity &entity, entt::registry &registry)
+void GoDance::enter(const entt::entity &entity, entt::registry &registry)
 {
     auto soundArea = SoundSystem::soundArea(registry);
     std::random_device rd;                                                                      // obtain a random number from hardware
@@ -58,10 +58,10 @@ void GoDance::enter(entt::entity &entity, entt::registry &registry)
 
     raver.target = sf::Vector2f(distrHor(gen), distrVert(gen));
 
-    std::cout << "Target " << raver.target.x << " " << raver.target.y << '\n';
+    // std::cout << "Target " << raver.target.x << " " << raver.target.y << '\n';
 }
 
-void GoDance::execute(entt::entity &entity, entt::registry &registry)
+void GoDance::execute(const entt::entity &entity, entt::registry &registry)
 {
     auto [raver, mov, anim] = registry.get<Raver, Moving, Animated>(entity);
     auto target = raver.target;
@@ -73,21 +73,43 @@ void GoDance::execute(entt::entity &entity, entt::registry &registry)
     }
 }
 
-void GoDance::exit(entt::entity &entity, entt::registry &registry)
+void GoDance::exit(const entt::entity &entity, entt::registry &registry)
 {
     auto [anim, mov] = registry.get<Animated, Moving>(entity);
     mov.velocity = {0, 0};
     anim.currentAnimation = anim.animations["up_walking"];
 }
 
-void Idle::enter(entt::entity &entity, entt::registry &registry)
+void Idle::enter(const entt::entity &entity, entt::registry &registry)
 {
 }
 
-void Idle::execute(entt::entity &entity, entt::registry &registry)
+void Idle::execute(const entt::entity &entity, entt::registry &registry)
 {
 }
 
-void Idle::exit(entt::entity &entity, entt::registry &registry)
+void Idle::exit(const entt::entity &entity, entt::registry &registry)
+{
+}
+
+void GoDrink::enter(const entt::entity &entity, entt::registry &registry)
+{
+    // TODO: Ravers wait in line
+    // sf::FloatRect = SoundSystem::soundArea(registry);
+    // std::random_device rd;                                                                      // obtain a random number from hardware
+    // std::mt19937 gen(rd());                                                                     // seed the generator
+    // std::uniform_int_distribution<> distrHor(soundArea.left, soundArea.left + soundArea.width); // define the range
+    // std::uniform_int_distribution<> distrVert(soundArea.top, soundArea.top + soundArea.height); // define the range
+
+    // auto &raver = registry.get<Raver>(entity);
+
+    // raver.target = sf::Vector2f((gen), distrVert(gen));
+}
+
+void GoDrink::execute(const entt::entity &entity, entt::registry &registry)
+{
+}
+
+void GoDrink::exit(const entt::entity &entity, entt::registry &registry)
 {
 }

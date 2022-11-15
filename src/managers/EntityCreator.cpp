@@ -51,6 +51,7 @@ entt::entity EntityCreator::createHuman(sf::Vector2f pos, string filePath)
 void EntityCreator::addRaver(sf::Vector2f pos, string filePath)
 {
     auto entity = createHuman(pos, filePath);
-    registry.emplace<Raver>(entity);
+    auto &raver = registry.emplace<Raver>(entity);
+    raver.thirst = 1.f;
     registry.emplace<Idle>(entity);
 }

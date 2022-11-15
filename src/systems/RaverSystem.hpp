@@ -14,4 +14,6 @@ public:
 private:
     void IdleFromToGoDance();
     entt::registry &registry;
+    sf::Clock frameClock;
+
 };

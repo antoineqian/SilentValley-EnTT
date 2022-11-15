@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="42">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="47">
  <tileset firstgid="1" source="tiles.tsx"/>
  <tileset firstgid="2701" source="Objects.tsx"/>
  <layer id="1" name="Ground" width="60" height="40">
@@ -56,5 +56,8 @@
   <object id="37" name="Speaker3" class="Speaker" gid="2702" x="606.667" y="256" width="16" height="32"/>
   <object id="38" name="Speaker4" class="Speaker" gid="2702" x="623.333" y="255.333" width="16" height="32"/>
   <object id="41" gid="2703" x="475.096" y="485.817" width="42.9744" height="37.8462"/>
+  <object id="42" gid="2704" x="290.373" y="322.557" width="32" height="48"/>
+  <object id="43" gid="2704" x="323.754" y="323.351" width="32" height="48"/>
+  <object id="44" gid="2704" x="357.135" y="323.351" width="32" height="48"/>
  </objectgroup>
 </map>

@@ -24,10 +24,14 @@ void GUISystem::speakerUpdate()
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
+// void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity)
+// {
+// }
 GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : registry(registry), gui{window}
 {
     loadChatBox(gui);
     registry.on_update<Speaker>().connect<&GUISystem::speakerUpdate>(this);
+    // registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
 }
 
 void GUISystem::draw(entt::registry &registry, sf::RenderWindow &window)

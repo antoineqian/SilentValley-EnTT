@@ -1,4 +1,5 @@
 #include "RaverSystem.hpp"
+#include <iostream>
 
 RaverSystem::RaverSystem(entt::registry &registry) : registry(registry)
 
@@ -6,9 +7,14 @@ RaverSystem::RaverSystem(entt::registry &registry) : registry(registry)
     registry.on_update<Speaker>().connect<&RaverSystem::IdleFromToGoDance>(this);
 }
 
-// void switchState(entt::entity &entity, type from,)
-// {
-// }
+template <typename T, typename U>
+void switchState(const entt::entity &entity, entt::registry &registry)
+{
+    registry.remove<T>(entity);
+    registry.emplace<U>(entity);
+    T::exit(entity, registry);
+    U::enter(entity, registry);
+}
 
 void RaverSystem::IdleFromToGoDance()
 {
@@ -16,31 +22,39 @@ void RaverSystem::IdleFromToGoDance()
     bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
     if (speakerOn)
     {
-        for (auto entity : registry.view<Raver, Idle>())
+        for (auto &&entity : registry.view<Raver, Idle>())
         {
-            registry.remove<Idle>(entity);
-            registry.emplace<GoDance>(entity);
-            Idle::exit(entity, registry);
-            GoDance::enter(entity, registry);
+            switchState<Idle, GoDance>(entity, registry);
         };
     }
     else
     {
         for (auto entity : registry.view<Raver, GoDance>())
         {
-            registry.remove<GoDance>(entity);
-            registry.emplace<Idle>(entity);
-            GoDance::exit(entity, registry);
-            Idle::enter(entity, registry);
+            switchState<GoDance, Idle>(entity, registry);
         };
     }
 }
 
 void RaverSystem::update(entt::registry &registry)
 {
-    for (auto entity : registry.view<GoDance>())
+    auto frameTime = frameClock.restart().asSeconds() / 60;
+
+    for (auto entity : registry.view<Raver, GoDance>())
     {
-        GoDance::execute(entity, registry);
+        auto &raver = registry.get<Raver>(entity);
+
+        raver.thirst -= frameTime;
+        if (raver.thirst > 0)
+        {
+            std::cout << raver.thirst << "\n";
+            GoDance::execute(entity, registry);
+        }
+        else
+        {
+            std::cout << raver.thirst << "\n";
+            switchState<GoDance, GoDrink>(entity, registry);
+        }
     };
 
     for (auto entity : registry.view<Idle>())

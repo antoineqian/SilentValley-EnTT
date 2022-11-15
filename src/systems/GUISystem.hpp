@@ -3,6 +3,8 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backends/SFML.hpp>
 #include "../components/Speaker.hpp"
+#include "../components/state/RaverStates.hpp"
+
 #include <sstream>
 using std::ostringstream;
 class GUISystem : public IDrawSystem

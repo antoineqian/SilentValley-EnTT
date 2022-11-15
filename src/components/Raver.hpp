@@ -2,6 +2,6 @@
 
 struct Raver
 {
-    // int thirst;
+    float thirst;
     sf::Vector2f target;
 };

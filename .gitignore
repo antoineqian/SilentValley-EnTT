@@ -5,3 +5,6 @@ build/
 
 cmake/
 .DS_Store
+
+TiledMap.tiled-project
+TiledMap.tiled-session
