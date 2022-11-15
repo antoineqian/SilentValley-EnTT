@@ -81,7 +81,7 @@ void PlayerControlSystem::update(entt::registry &registry)
     if (useSpeakers)
     {
         registry.view<Speaker>().each(
-            [&registry](entt::entity entity, auto &speaker)
+            [&registry](auto entity, auto &speaker)
             {
                 registry.patch<Speaker>(entity, [](auto &speaker)
                                         { speaker.isActive = !speaker.isActive; });

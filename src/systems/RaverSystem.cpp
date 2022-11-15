@@ -18,7 +18,6 @@ void RaverSystem::IdleFromToGoDance()
     bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
     if (speakerOn)
     {
-        // auto &thisRegistry = this->registry;
         registry.view<Raver, Idle>().each(
             [this](auto entity, auto &raver, auto &state)
             {
@@ -41,12 +40,19 @@ void RaverSystem::IdleFromToGoDance()
     }
 }
 
-void RaverSystem::update(entt::registry &registry){
-    // registry.view<Raver, GoDance>().each(
-    //     [&registry](auto &entity, auto &raver)
-    //     {
-    //         GoDance::execute(entity, registry);
-    //     });
+void RaverSystem::update(entt::registry &registry)
+{
+    registry.view<Raver, GoDance>().each(
+        [&registry](auto entity, auto &raver, auto &state)
+        {
+            GoDance::execute(entity, registry);
+        });
+
+    registry.view<Raver, Idle>().each(
+        [&registry](auto entity, auto &raver, auto &state)
+        {
+            Idle::execute(entity, registry);
+        });
 };
 
 // void Raver::changeState(std::unique_ptr<State> state)

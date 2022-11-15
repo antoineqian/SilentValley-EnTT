@@ -46,7 +46,7 @@ public:
 
         addPlayer("assets/complete_player.png");
         addRaver(sf::Vector2f(WINDOW_WIDTH / 3, WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
-        addRaver(sf::Vector2f(WINDOW_WIDTH / 3, 2 * WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
+        // addRaver(sf::Vector2f(WINDOW_WIDTH / 3, 2 * WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
 
         update(window);
     }
@@ -117,6 +117,7 @@ public:
     {
         auto entity = createHuman(pos, filePath);
         registry.emplace<Raver>(entity);
+        registry.emplace<Idle>(entity);
     }
 
 private:
