@@ -15,6 +15,11 @@ void loadChatBox(tgui::GuiBase &gui)
     gui.add(chatbox, "InfoBox");
 }
 
+void loadMenu()
+{
+    auto button = tgui::CanvasSFML::create();
+}
+
 void GUISystem::speakerUpdate()
 {
     std::cout << "onSpeaker\n";
