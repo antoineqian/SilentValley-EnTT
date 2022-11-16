@@ -19,11 +19,11 @@ public:
     void activate()
     {
         updateSystems.emplace_back(make_unique<PlayerControlSystem>());
+        updateSystems.emplace_back(make_unique<SoundSystem>(registry));
         updateSystems.emplace_back(make_unique<RaverSystem>(registry));
         updateSystems.emplace_back(make_unique<CollisionSystem>());
         updateSystems.emplace_back(make_unique<MovingSystem>());
         updateSystems.emplace_back(make_unique<AnimationSystem>());
-        updateSystems.emplace_back(make_unique<SoundSystem>(registry));
 
         sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
                                 "Silent Valley Game"};

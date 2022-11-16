@@ -18,4 +18,5 @@ private:
     tgui::GuiSFML gui;
 
     void speakerUpdate();
+    void onGoDanceConstruct(entt::registry &registry, entt::entity entity);
 };

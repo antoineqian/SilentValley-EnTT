@@ -17,6 +17,8 @@ void loadChatBox(tgui::GuiBase &gui)
 
 void GUISystem::speakerUpdate()
 {
+    std::cout << "onSpeaker\n";
+
     auto aSpeaker = registry.view<Speaker>().begin();
     bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
     ostringstream oss;
@@ -24,14 +26,22 @@ void GUISystem::speakerUpdate()
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
-// void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity)
-// {
-// }
+void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity)
+{
+    std::cout << "onGoDance\n";
+    auto name = registry.get<Raver>(entity).name;
+    ostringstream oss;
+    oss << name << "is going to dance!";
+    gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
+}
+
 GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : registry(registry), gui{window}
 {
     loadChatBox(gui);
+    // TODO: Create a global SoundSystem component upon which GoDance gets updated.
+    //  This way things get updated in the correct order.
+    registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
     registry.on_update<Speaker>().connect<&GUISystem::speakerUpdate>(this);
-    // registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
 }
 
 void GUISystem::draw(entt::registry &registry, sf::RenderWindow &window)
