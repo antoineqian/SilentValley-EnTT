@@ -11,10 +11,11 @@
 
 class TmxParser;
 
+// Singleton class
 class EntityCreator
 {
 public:
-    EntityCreator(entt::registry &registry);
+    static EntityCreator &inst(entt::registry &registry);
 
     void addTextureFromPath(string filePath);
 
@@ -26,6 +27,8 @@ public:
     void addRaver(sf::Vector2f pos, string filePath);
 
 private:
+    EntityCreator(entt::registry &registry);
+
     entt::registry &registry;
     using TextureResource = std::map<std::string, std::shared_ptr<sf::Texture>>;
     TextureResource textures;

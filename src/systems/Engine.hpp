@@ -33,8 +33,7 @@ public:
         drawSystems.emplace_back(make_unique<RenderSystem>());
         drawSystems.emplace_back(make_unique<GUISystem>(registry, window));
 
-        EntityCreator creator(registry);
-        creator.createScene();
+        EntityCreator::inst(registry).createScene();
         update(window);
     }
 

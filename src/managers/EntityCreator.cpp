@@ -1,5 +1,11 @@
 #include "EntityCreator.hpp"
 
+EntityCreator &EntityCreator::inst(entt::registry &registry)
+{
+    static EntityCreator mgr(registry);
+    return mgr;
+}
+
 EntityCreator::EntityCreator(entt::registry &registry) : registry(registry)
 {
     TmxParser::loadMap("assets/map/mainMap.tmx", registry, *this);
