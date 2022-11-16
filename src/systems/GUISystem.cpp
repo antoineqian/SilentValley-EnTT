@@ -1,5 +1,10 @@
 #include "GUISystem.hpp"
 
+void GUISystem::handleEvent(sf::Event event)
+{
+    gui.handleEvent(event);
+}
+
 void loadChatBox(tgui::GuiBase &gui)
 {
     tgui::Theme theme;
@@ -15,18 +20,24 @@ void loadChatBox(tgui::GuiBase &gui)
     gui.add(chatbox, "InfoBox");
 }
 
-void loadMenu(tgui::GuiBase &gui)
+void GUISystem::selectItem()
 {
-    sf::Texture texture;
-    sf::Sprite sprite;
-    texture.loadFromFile("assets/map/objects/tree_01.png");
-    sprite.setTexture(texture);
+    std::cout << "Tree selected\n";
+}
 
-    auto canvas = tgui::CanvasSFML::create({200, 140});
+void GUISystem::loadMenu(tgui::GuiBase &gui)
+{
+
+    sf::Sprite sprite;
+    auto &texture = EntityCreator::inst(registry).getTextureFromPath("assets/map/objects/tree_01.png");
+    sprite.setTexture(texture);
+    auto size = texture.getSize();
+    auto canvas = tgui::CanvasSFML::create({size.x, size.y});
     canvas->setPosition(0, 100);
     canvas->clear();
     canvas->draw(sprite);
     canvas->display();
+    canvas->onClick(&GUISystem::selectItem, this);
     gui.add(canvas);
 }
 
@@ -56,8 +67,7 @@ GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : regis
     loadMenu(gui);
     // TODO: Create a global SoundSystem component upon which GoDance gets updated.
     //  This way things get updated in the correct order.
-    registry.on_construct<GoDance>()
-        .connect<&GUISystem::onGoDanceConstruct>(this);
+    registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
     registry.on_update<Speaker>().connect<&GUISystem::speakerUpdate>(this);
 }
 

@@ -31,7 +31,7 @@ public:
         // This allows other processes to run and reduces power consumption
         window.setFramerateLimit(60);
         drawSystems.emplace_back(make_unique<RenderSystem>());
-        drawSystems.emplace_back(make_unique<GUISystem>(registry, window));
+        gui = make_unique<GUISystem>(registry, window);
 
         EntityCreator::inst(registry).createScene();
         update(window);
@@ -53,6 +53,7 @@ public:
             // This will terminate the program
             while (window.pollEvent(event))
             {
+                gui->handleEvent(event);
                 if (event.type == sf::Event::Closed)
                     window.close();
             }
@@ -69,6 +70,8 @@ public:
             {
                 sys->draw(registry, window);
             }
+            gui->draw(registry, window);
+
             // Calculate the updated graphics
             window.display();
         }
@@ -77,6 +80,7 @@ public:
 private:
     std::vector<std::unique_ptr<IUpdateSystem>> updateSystems;
     std::vector<std::unique_ptr<IDrawSystem>> drawSystems;
+    std::unique_ptr<GUISystem> gui;
 
     entt::registry registry;
 };
