@@ -3,10 +3,18 @@
 void GUISystem::handleEvent(sf::Event event)
 {
     gui.handleEvent(event);
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && itemSelected)
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && isItemSelected)
     {
-        // placeItem();
+        auto ptr = selectedItem.lock();
+        placeItem(ptr, sf::Mouse::getPosition());
     }
+}
+
+void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
+{
+    std::cout << "Item: " << item->getName() << " placed at "
+              << mousePos.x << " " << mousePos.y << "\n";
+    isItemSelected = false;
 }
 
 void loadChatBox(tgui::GuiBase &gui)
@@ -24,13 +32,6 @@ void loadChatBox(tgui::GuiBase &gui)
     gui.add(chatbox, "InfoBox");
 }
 
-void GUISystem::selectItem(string name)
-{
-    itemSelected = true;
-    // currentSelectedItem
-    // std::cout << name << "selected\n";
-}
-
 void GUISystem::loadMenu(tgui::GuiBase &gui)
 {
     int numCols = 5;
@@ -46,12 +47,11 @@ void GUISystem::loadMenu(tgui::GuiBase &gui)
     menu->setTitle("Item window");
 
     auto items = ItemManager::inst().getAvailableItems();
-    std::cout << items.size() << '\n';
     int index = 0;
     for (auto &&item : items)
     {
         sf::Sprite sprite;
-        auto &texture = EntityCreator::inst(registry).getTextureFromPath(item.getPath());
+        auto &texture = EntityCreator::inst(registry).getTextureFromPath(item->getPath());
         sprite.setTexture(texture);
         auto textureSize = texture.getSize();
         if (textureSize.x > displaySize.x && textureSize.y > displaySize.y)
@@ -62,31 +62,15 @@ void GUISystem::loadMenu(tgui::GuiBase &gui)
         canvas->draw(sprite);
         canvas->display();
         canvas->onClick(
-            [this](string itemName)
-            { this->itemSelected = true;  
-            std::cout << itemName << " selected\n"; },
-            item.getName());
+            [this](shared_ptr<const Item> item)
+            {
+                this->isItemSelected = true;
+                this->selectedItem = item;
+            std::cout << item->getName() << " selected\n"; },
+            item);
         menu->add(canvas);
         index++;
     }
-
-    // Item it(100, "tree_01");
-    // sf::Sprite sprite;
-    // auto &texture = EntityCreator::inst(registry).getTextureFromPath("assets/map/objects/tree_01.png");
-    // sprite.setTexture(texture);
-    // auto textureSize = texture.getSize();
-    // auto displaySize = sf::Vector2f(32, 32);
-    // sprite.setScale(displaySize.x / textureSize.x, displaySize.y / textureSize.y);
-    // auto canvas = tgui::CanvasSFML::create({displaySize.x, displaySize.y});
-
-    // canvas->setPosition(0, 100);
-    // canvas->clear();
-    // canvas->draw(sprite);
-    // canvas->display();
-    // // canvas->onClick(&Item::selectItem, it);
-
-    // canvas->onClick(&GUISystem::selectItem, this);
-    // gui.add(canvas);
 
     gui.add(menu);
 }

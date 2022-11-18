@@ -14,7 +14,6 @@ public:
     GUISystem(entt::registry &registry, sf::RenderWindow &window);
     void draw(entt::registry &registry, sf::RenderWindow &window) override;
     void handleEvent(sf::Event event);
-    void selectItem(string name);
 
 private:
     entt::registry &registry;
@@ -22,6 +21,7 @@ private:
     void loadMenu(tgui::GuiBase &gui);
     void speakerUpdate();
     void onGoDanceConstruct(entt::registry &registry, entt::entity entity);
-    bool itemSelected;
-    void placeItem();
+    bool isItemSelected;
+    std::weak_ptr<const Item> selectedItem;
+    void placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos);
 };
