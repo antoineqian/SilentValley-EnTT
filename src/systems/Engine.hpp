@@ -11,6 +11,7 @@
 #include "GUISystem.hpp"
 #include "MovingSystem.hpp"
 #include "../managers/EntityCreator.hpp"
+#include "../managers/ItemManager.hpp"
 using std::make_unique;
 
 class Engine
@@ -31,6 +32,7 @@ public:
         // This allows other processes to run and reduces power consumption
         window.setFramerateLimit(60);
         drawSystems.emplace_back(make_unique<RenderSystem>());
+        ItemManager::inst().init();
         gui = make_unique<GUISystem>(registry, window);
 
         EntityCreator::inst(registry).createScene();
