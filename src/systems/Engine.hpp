@@ -22,10 +22,10 @@ public:
     {
         updateSystems.emplace_back(make_unique<PlayerControlSystem>());
         updateSystems.emplace_back(make_unique<SoundSystem>(registry));
-        updateSystems.emplace_back(make_unique<RaverSystem>(registry));
-        updateSystems.emplace_back(make_unique<CollisionSystem>());
-        updateSystems.emplace_back(make_unique<MovingSystem>());
-        updateSystems.emplace_back(make_unique<AnimationSystem>());
+        updateSystems.emplace_back(make_unique<MovingSystem>());        // Moving/SoundSystem after PlayerControlSystem to account for player input
+        updateSystems.emplace_back(make_unique<RaverSystem>(registry)); // RaverSystem after MovingSystem to override with state-specific animations
+        updateSystems.emplace_back(make_unique<CollisionSystem>());     // CollisionSystem after MovingSystem to update Collision
+        updateSystems.emplace_back(make_unique<AnimationSystem>());     // AnimationSystem after Raver/Moving system to play according animation
 
         sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
                                 "Silent Valley Game"};

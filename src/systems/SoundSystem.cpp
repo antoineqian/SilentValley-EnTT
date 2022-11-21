@@ -30,10 +30,4 @@ void SoundSystem::update(entt::registry &registry)
 sf::FloatRect SoundSystem::soundArea(entt::registry &registry)
 {
     return sf::FloatRect{483, 281, 173, 91};
-    // sf::FloatRect area;
-    // registry.view<Speaker, Collision>().each(
-    //     [this](auto &speaker, auto &col)
-    //     {
-    //         auto box = col.hitBox;
-    //     });
 }

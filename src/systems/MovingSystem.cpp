@@ -11,9 +11,6 @@ void MovingSystem::update(entt::registry &registry)
             auto actualBox = sf::FloatRect{box.left, box.top + 12, TILE_SIZE, PLAYER_HEIGHT};
             collision.hitBox = shrinkToHitBox(actualBox);
 
-            // auto pos = animated.animatedSprite.getPosition();
-            // std::cout << pos.x << " " << pos.y << '\n';
-
             Direction direction{Direction::nodir};
             if (moving.velocity.x < 0)
             {
@@ -31,10 +28,18 @@ void MovingSystem::update(entt::registry &registry)
             {
                 direction = Direction::down;
             }
+
+            string mode;
+            // Direction has changed
             if (magic_enum::enum_integer(direction) != magic_enum::enum_integer(Direction::nodir))
             {
                 moving.direction = direction;
-                animated.currentAnimation = animated.animations[string(magic_enum::enum_name(direction)) + string("_walking")];
+                mode = "_walking";
             }
+            else
+            { // Direction has not changed
+                mode = "_idle";
+            }
+            animated.currentAnimation = animated.animations[string(magic_enum::enum_name(moving.direction)) + mode];
         });
 }

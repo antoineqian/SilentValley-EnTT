@@ -60,5 +60,6 @@
 		<object id="43" gid="2704" x="323.754" y="323.351" width="32" height="48" />
 		<object id="44" gid="2704" x="357.135" y="323.351" width="32" height="48" />
 		<object id="45" gid="2701" x="381" y="265" width="32" height="32" />
+		<object id="46" gid="2701" x="307" y="150" width="32" height="32" />
 	</objectgroup>
 </map>
