@@ -59,6 +59,6 @@
 		<object id="42" gid="2704" x="290.373" y="322.557" width="32" height="48" />
 		<object id="43" gid="2704" x="323.754" y="323.351" width="32" height="48" />
 		<object id="44" gid="2704" x="357.135" y="323.351" width="32" height="48" />
-		<object id="45" gid="2703" x="310" y="358" width="64" height="64" />
+		<object id="45" gid="2701" x="381" y="265" width="32" height="32" />
 	</objectgroup>
 </map>

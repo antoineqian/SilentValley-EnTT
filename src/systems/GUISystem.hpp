@@ -23,7 +23,7 @@ private:
     void loadMenu(tgui::GuiBase &gui);
     void speakerUpdate();
     void onGoDanceConstruct(entt::registry &registry, entt::entity entity);
-    bool isItemSelected;
+    bool isItemSelected = false;
     std::weak_ptr<const Item> selectedItem;
     void placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos);
 };

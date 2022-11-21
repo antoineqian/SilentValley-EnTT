@@ -5,22 +5,29 @@ void GUISystem::handleEvent(sf::Event event)
     gui.handleEvent(event);
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && isItemSelected)
     {
+        auto mousePos = sf::Mouse::getPosition(window);
+        if (mousePos.x < 0 || mousePos.x > WINDOW_WIDTH || mousePos.y < 0 || mousePos.y > WINDOW_HEIGHT)
+            return;
         auto ptr = selectedItem.lock();
-        placeItem(ptr, sf::Mouse::getPosition(window));
+        placeItem(ptr, mousePos);
     }
 }
 
 void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
 {
+    // TODO: Bug with the position when the window is moved
     // TODO: Verify that you don't click on the menu;
     try
     {
         TmxWriter::inst().addObject(item->getName(), mousePos, registry);
         isItemSelected = false;
+        ostringstream oss;
+        oss << item->getName() << " added!";
+        gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
     }
     catch (const char *exception)
     {
-        std::cout << exception << '\n';
+        gui.get<tgui::ChatBox>("InfoBox")->addLine(exception);
     }
 }
 
