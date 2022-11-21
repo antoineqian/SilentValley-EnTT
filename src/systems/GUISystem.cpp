@@ -89,10 +89,10 @@ void GUISystem::loadMenu(tgui::GuiBase &gui)
 
 void GUISystem::speakerUpdate()
 {
-    auto aSpeaker = registry.view<Speaker>().begin();
-    bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
+    auto rig = registry.view<SoundRig>().begin();
+    bool speakersOn = registry.get<SoundRig>(*rig).isActive;
     ostringstream oss;
-    oss << "Speakers " << (speakerOn ? "" : "de") << "activated!";
+    oss << "Speakers " << (speakersOn ? "" : "de") << "activated!";
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 

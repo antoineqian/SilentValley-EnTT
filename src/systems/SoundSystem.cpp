@@ -6,20 +6,22 @@ SoundSystem::SoundSystem(entt::registry &registry) : jukebox("assets/sounds"), r
 {
     jukebox.requestAll();
     observer.connect(registry, entt::collector.update<Speaker>());
-    registry.on_update<Speaker>().connect<&SoundSystem::switchSoundSystem>(this);
+    auto entity = registry.create();
+    registry.emplace<SoundRig>(entity);
+    registry.on_update<SoundRig>().connect<&SoundSystem::switchSoundSystem>(this);
 }
 
 void SoundSystem::switchSoundSystem()
 {
-    registry.view<Speaker>().each(
-        [this](auto &speaker)
+    registry.view<SoundRig>().each(
+        [this](auto &system)
         {
-            if (speaker.isActive && !jukebox.playing())
+            if (system.isActive && !jukebox.playing())
             {
                 std::cout << "Play\n";
                 jukebox.play();
             }
-            else if (!speaker.isActive && jukebox.playing())
+            else if (!system.isActive && jukebox.playing())
             {
                 std::cout << "Stop\n";
                 jukebox.stop();

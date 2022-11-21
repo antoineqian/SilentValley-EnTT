@@ -17,9 +17,9 @@ void switchState(const entt::entity &entity, entt::registry &registry)
 
 void RaverSystem::IdleFromToGoDance()
 {
-    auto aSpeaker = registry.view<Speaker>().begin();
-    bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
-    if (speakerOn)
+    auto rig = registry.view<SoundRig>().begin();
+    bool speakersOn = registry.get<SoundRig>(*rig).isActive;
+    if (speakersOn)
     {
         for (auto &&entity : registry.view<Raver, Idle>())
         {
