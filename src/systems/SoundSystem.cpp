@@ -1,10 +1,11 @@
 #include "SoundSystem.hpp"
 
-SoundSystem::SoundSystem(entt::registry &registry) : registry(registry)
-{
-    observer.connect(registry, entt::collector.update<Speaker>());
-    music.openFromFile("assets/sounds/08. Surrounded.flac");
+#include <iostream>
 
+SoundSystem::SoundSystem(entt::registry &registry) : jukebox("assets/sounds"), registry(registry)
+{
+    jukebox.requestAll();
+    observer.connect(registry, entt::collector.update<Speaker>());
     registry.on_update<Speaker>().connect<&SoundSystem::switchSoundSystem>(this);
 }
 
@@ -13,19 +14,22 @@ void SoundSystem::switchSoundSystem()
     registry.view<Speaker>().each(
         [this](auto &speaker)
         {
-            if (speaker.isActive && (music.getStatus() == sf::SoundSource::Status::Paused || music.getStatus() == sf::SoundSource::Status::Stopped))
+            if (speaker.isActive && !jukebox.playing())
             {
-                music.play();
+                std::cout << "Play\n";
+                jukebox.play();
             }
-            else if (!speaker.isActive && music.getStatus() == sf::SoundSource::Status::Playing)
+            else if (!speaker.isActive && jukebox.playing())
             {
-                music.pause();
+                std::cout << "Stop\n";
+                jukebox.stop();
             }
         });
 }
 
 void SoundSystem::update(entt::registry &registry)
 {
+    jukebox.update();
 }
 
 sf::FloatRect SoundSystem::soundArea(entt::registry &registry)

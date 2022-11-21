@@ -19,7 +19,7 @@
 //
 //    3. This notice may not be removed or altered from any source distribution.
 
-#include "Jukebox.hh"
+#include "Jukebox.hpp"
 #include <errno.h>
 #include <string.h>
 #include <dirent.h>
@@ -57,6 +57,7 @@ Jukebox::Jukebox(const std::string &dir)
             std::cerr << "Jukebox failed to add '" << path << "'" << std::endl;
             continue;
         }
+        std::cout << filename << " added\n";
         const auto inserted = m_catalog.emplace(filename, std::move(music));
         assert(inserted.second);
     }
@@ -66,6 +67,7 @@ void Jukebox::play()
 {
     if (m_playlist.empty())
     {
+        std::cout << "isempty\n";
         assert(m_status == sf::SoundSource::Stopped);
         return;
     }

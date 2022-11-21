@@ -46,12 +46,10 @@ void RaverSystem::update(entt::registry &registry)
         raver.thirst -= frameTime;
         if (raver.thirst > 0)
         {
-            std::cout << raver.thirst << "\n";
             GoDance::execute(entity, registry);
         }
         else
         {
-            std::cout << raver.thirst << "\n";
             switchState<GoDance, GoDrink>(entity, registry);
         }
     };

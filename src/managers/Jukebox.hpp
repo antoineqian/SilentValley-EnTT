@@ -19,8 +19,7 @@
 //
 //    3. This notice may not be removed or altered from any source distribution.
 
-#ifndef JUKEBOX_HH_INCLUDED
-#define JUKEBOX_HH_INCLUDED
+#pragma once
 
 #include <cstddef>
 #include <algorithm>
@@ -166,5 +165,3 @@ private:
     std::size_t m_current = 0;
     bool m_looping = true;
 };
-
-#endif
