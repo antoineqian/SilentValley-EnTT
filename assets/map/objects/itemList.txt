@@ -1,4 +1,0 @@
-doubleSpeakers 20
-lemonadeStand 5
-tent 10
-tree_01 2

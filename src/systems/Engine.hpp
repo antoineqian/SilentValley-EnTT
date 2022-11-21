@@ -11,8 +11,6 @@
 #include "GUISystem.hpp"
 #include "MovingSystem.hpp"
 #include "../managers/EntityCreator.hpp"
-#include "../managers/ItemManager.hpp"
-#include "../managers/TmxWriter.hpp"
 using std::make_unique;
 
 class Engine
@@ -33,11 +31,10 @@ public:
         // This allows other processes to run and reduces power consumption
         window.setFramerateLimit(60);
         drawSystems.emplace_back(make_unique<RenderSystem>());
-        ItemManager::inst().init();
+        drawSystems.emplace_back(make_unique<GUISystem>(registry, window));
 
-        EntityCreator::inst().createScene(registry);
-        gui = make_unique<GUISystem>(registry, window);
-
+        EntityCreator creator(registry);
+        creator.createScene();
         update(window);
     }
 
@@ -50,8 +47,6 @@ public:
         // Display the updated graphics
         while (window.isOpen())
         {
-            // std::cout << sf::Mouse::getPosition(window).x << " " << sf::Mouse::getPosition(window).y << " relative to window\n";
-            // std::cout << sf::Mouse::getPosition().x << " " << sf::Mouse::getPosition().y << "\n";
             window.clear(sf::Color::Black);
             sf::Event event;
 
@@ -59,7 +54,6 @@ public:
             // This will terminate the program
             while (window.pollEvent(event))
             {
-                gui->handleEvent(event);
                 if (event.type == sf::Event::Closed)
                     window.close();
             }
@@ -76,8 +70,6 @@ public:
             {
                 sys->draw(registry, window);
             }
-            gui->draw(registry, window);
-
             // Calculate the updated graphics
             window.display();
         }
@@ -86,7 +78,6 @@ public:
 private:
     std::vector<std::unique_ptr<IUpdateSystem>> updateSystems;
     std::vector<std::unique_ptr<IDrawSystem>> drawSystems;
-    std::unique_ptr<GUISystem> gui;
 
     entt::registry registry;
 };

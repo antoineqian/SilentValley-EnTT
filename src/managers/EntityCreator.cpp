@@ -1,9 +1,8 @@
 #include "EntityCreator.hpp"
 
-EntityCreator &EntityCreator::inst()
+EntityCreator::EntityCreator(entt::registry &registry) : registry(registry)
 {
-    static EntityCreator mgr;
-    return mgr;
+    TmxParser::loadMap("assets/map/mainMap.tmx", registry, *this);
 }
 
 void EntityCreator::addTextureFromPath(string filePath)
@@ -13,52 +12,25 @@ void EntityCreator::addTextureFromPath(string filePath)
     textures.insert(std::make_pair(filePath, std::move(newTexture)));
 }
 
-void EntityCreator::createBasicEntity(const string &className, sf::Vector2f position, const string &path, entt::registry &registry)
-{
-
-    auto entity = registry.create();
-    auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
-    addTextureFromPath(path);
-    sprite.setTexture(getTextureFromPath(path));
-    sprite.setPosition(position.x, position.y);
-    registry.view<Collision>().each(
-        [&registry, &sprite, &entity](auto &collision)
-        {
-            auto &box = collision.hitBox;
-            if (box.intersects(shrinkToHitBox(sprite.getGlobalBounds())))
-            {
-                registry.destroy(entity);
-                throw "Cannot place entity on top of another entity";
-            }
-        });
-    registry.emplace<Collision>(entity, shrinkToHitBox(sprite.getGlobalBounds()));
-
-    if (className == string("Speaker"))
-    {
-        registry.emplace<Speaker>(entity);
-    }
-};
-
 sf::Texture &EntityCreator::getTextureFromPath(string filePath)
 {
     return *(textures[filePath]);
 }
 
-void EntityCreator::createScene(entt::registry &registry)
+void EntityCreator::createScene()
 {
-    TmxParser::loadMap("assets/map/mainMap.tmx", registry);
-    addPlayer("assets/complete_player.png", registry);
-    addRaver(sf::Vector2f(WINDOW_WIDTH / 3, WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png", registry);
+    addPlayer("assets/complete_player.png");
+    addRaver(sf::Vector2f(WINDOW_WIDTH / 3, WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
     // addRaver(sf::Vector2f(WINDOW_WIDTH / 3, 2 * WINDOW_HEIGHT / 3), "assets/characters/Premade_Character_07.png");
 }
 
-void EntityCreator::addPlayer(string filePath, entt::registry &registry)
+void EntityCreator::addPlayer(string filePath)
 {
-    auto entity = createHuman(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), filePath, registry);
+    auto entity = createHuman(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), filePath);
     registry.emplace<PlayerController>(entity);
 }
 
-entt::entity EntityCreator::createHuman(sf::Vector2f pos, string filePath, entt::registry &registry)
+entt::entity EntityCreator::createHuman(sf::Vector2f pos, string filePath)
 {
     auto entity = registry.create();
     addTextureFromPath(filePath);
@@ -76,9 +48,9 @@ entt::entity EntityCreator::createHuman(sf::Vector2f pos, string filePath, entt:
     return entity;
 }
 
-void EntityCreator::addRaver(sf::Vector2f pos, string filePath, entt::registry &registry)
+void EntityCreator::addRaver(sf::Vector2f pos, string filePath)
 {
-    auto entity = createHuman(pos, filePath, registry);
+    auto entity = createHuman(pos, filePath);
     auto &raver = registry.emplace<Raver>(entity);
     raver.thirst = 1.f;
     raver.name = "Samantha";

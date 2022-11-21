@@ -1,6 +1,6 @@
 #include "TmxParser.hpp"
 
-void TmxParser::loadMap(string filepath, entt::registry &registry)
+void TmxParser::loadMap(string filepath, entt::registry &registry, EntityCreator &creator)
 {
     tmx::Map gameMap;
     gameMap.load(filepath);
@@ -28,9 +28,19 @@ void TmxParser::loadMap(string filepath, entt::registry &registry)
             const auto &objectLayer = gameMap.getLayers()[i]->getLayerAs<tmx::ObjectGroup>();
             for (const auto &object : objectLayer.getObjects())
             {
+                auto entity = registry.create();
                 const auto pos = object.getPosition();
                 auto tID = object.getTileID();
-                EntityCreator::inst().createBasicEntity(object.getClass(), sf::Vector2f(pos.x, pos.y), objectTileSet->getTile(tID)->imagePath, registry);
+                auto path = objectTileSet->getTile(tID)->imagePath;
+                creator.addTextureFromPath(path);
+                auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
+                sprite.setTexture(creator.getTextureFromPath(path));
+                sprite.setPosition(pos.x, pos.y);
+                registry.emplace<Collision>(entity, shrinkToHitBox(sprite.getGlobalBounds()));
+                if (object.getClass() == string("Speaker"))
+                {
+                    registry.emplace<Speaker>(entity);
+                }
             }
         }
     }
