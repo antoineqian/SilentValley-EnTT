@@ -6,6 +6,7 @@
 #include "../components/state/RaverStates.hpp"
 #include "../managers/EntityCreator.hpp"
 #include "../managers/ItemManager.hpp"
+#include "../managers/TmxWriter.hpp"
 #include <sstream>
 using std::ostringstream;
 class GUISystem : public IDrawSystem

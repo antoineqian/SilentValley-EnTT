@@ -12,9 +12,9 @@ public:
     void selectItem()
     {
     }
-    string getPath() const { return path; }
+    const string& getPath() const { return path; }
 
-    string getName() const { return name; }
+    const string& getName() const { return name; }
     int getPrice() const { return price; }
 
 private:

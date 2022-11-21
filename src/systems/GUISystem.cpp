@@ -12,8 +12,8 @@ void GUISystem::handleEvent(sf::Event event)
 
 void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
 {
-    std::cout << "Item: " << item->getName() << " placed at "
-              << mousePos.x << " " << mousePos.y << "\n";
+    // TODO: Verify that you don't click on the menu;
+    TmxWriter::inst().addObject(item->getName(), mousePos);
     isItemSelected = false;
 }
 
