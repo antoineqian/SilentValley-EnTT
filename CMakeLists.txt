@@ -39,9 +39,9 @@ target_link_libraries(silentValleyLib
 )
 
 target_include_directories(silentValleyLib PUBLIC
-    # ./external
     ./external/tmxlite/tmxlite/include
     ./external/entt/src/entt/
+    ./external/pugixml-1.13/src/
 )
 
 add_executable(silentValley src/main.cpp)

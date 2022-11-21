@@ -35,7 +35,6 @@ void loadChatBox(tgui::GuiBase &gui)
 void GUISystem::loadMenu(tgui::GuiBase &gui)
 {
     int numCols = 5;
-    // int nRows;
     auto displaySize = sf::Vector2f(32, 32);
 
     tgui::Theme theme;
