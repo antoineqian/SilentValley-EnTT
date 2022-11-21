@@ -2,7 +2,6 @@
 #include <iostream>
 
 RaverSystem::RaverSystem(entt::registry &registry) : registry(registry)
-
 {
     registry.on_update<Speaker>().connect<&RaverSystem::IdleFromToGoDance>(this);
 }

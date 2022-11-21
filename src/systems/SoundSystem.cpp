@@ -23,11 +23,13 @@ void SoundSystem::switchSoundSystem()
             }
         });
 }
+
 void SoundSystem::update(entt::registry &registry)
 {
 }
 
 sf::FloatRect SoundSystem::soundArea(entt::registry &registry)
 {
+    // TODO: Calculate area
     return sf::FloatRect{483, 281, 173, 91};
 }

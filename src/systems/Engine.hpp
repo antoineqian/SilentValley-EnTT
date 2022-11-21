@@ -34,7 +34,6 @@ public:
         window.setFramerateLimit(60);
         drawSystems.emplace_back(make_unique<RenderSystem>());
         ItemManager::inst().init();
-
         EntityCreator::inst().createScene(registry);
         gui = make_unique<GUISystem>(registry, window);
 
@@ -50,8 +49,6 @@ public:
         // Display the updated graphics
         while (window.isOpen())
         {
-            // std::cout << sf::Mouse::getPosition(window).x << " " << sf::Mouse::getPosition(window).y << " relative to window\n";
-            // std::cout << sf::Mouse::getPosition().x << " " << sf::Mouse::getPosition().y << "\n";
             window.clear(sf::Color::Black);
             sf::Event event;
 
@@ -77,8 +74,6 @@ public:
                 sys->draw(registry, window);
             }
             gui->draw(registry, window);
-
-            // Calculate the updated graphics
             window.display();
         }
     }
@@ -87,6 +82,5 @@ private:
     std::vector<std::unique_ptr<IUpdateSystem>> updateSystems;
     std::vector<std::unique_ptr<IDrawSystem>> drawSystems;
     std::unique_ptr<GUISystem> gui;
-
     entt::registry registry;
 };

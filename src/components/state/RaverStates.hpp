@@ -16,6 +16,7 @@ using std::unique_ptr;
 //------------------------------------------------------------------------
 struct GoDance
 {
+    // TODO: Go Dancing with probability
     static void enter(const entt::entity &entity, entt::registry &registry);
 
     static void execute(const entt::entity &entity, entt::registry &registry);
@@ -28,6 +29,7 @@ struct GoDance
 //------------------------------------------------------------------------
 struct Idle
 {
+    // TODO: Wandering around
     static void enter(const entt::entity &entity, entt::registry &registry);
 
     static void execute(const entt::entity &entity, entt::registry &registry);
