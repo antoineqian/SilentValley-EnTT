@@ -1,6 +1,6 @@
 #include "TmxParser.hpp"
 
-void TmxParser::loadMap(string filepath, entt::registry &registry, EntityCreator &creator)
+void TmxParser::loadMap(string filepath, entt::registry &registry)
 {
     tmx::Map gameMap;
     gameMap.load(filepath);
@@ -26,22 +26,11 @@ void TmxParser::loadMap(string filepath, entt::registry &registry, EntityCreator
         if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Object)
         {
             const auto &objectLayer = gameMap.getLayers()[i]->getLayerAs<tmx::ObjectGroup>();
-            std::cout << objectLayer.getObjects().size() << " sized\n";
             for (const auto &object : objectLayer.getObjects())
             {
-                auto entity = registry.create();
                 const auto pos = object.getPosition();
                 auto tID = object.getTileID();
-                auto path = objectTileSet->getTile(tID)->imagePath;
-                creator.addTextureFromPath(path);
-                auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
-                sprite.setTexture(creator.getTextureFromPath(path));
-                sprite.setPosition(pos.x, pos.y);
-                registry.emplace<Collision>(entity, shrinkToHitBox(sprite.getGlobalBounds()));
-                if (object.getClass() == string("Speaker"))
-                {
-                    registry.emplace<Speaker>(entity);
-                }
+                EntityCreator::inst().createBasicEntity(object.getClass(), sf::Vector2f(pos.x, pos.y), objectTileSet->getTile(tID)->imagePath, registry);
             }
         }
     }

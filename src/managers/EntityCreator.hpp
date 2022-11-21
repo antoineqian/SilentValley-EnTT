@@ -15,23 +15,22 @@ class TmxParser;
 class EntityCreator
 {
 public:
-    static EntityCreator &inst(entt::registry &registry);
+    static EntityCreator &inst();
 
     void addTextureFromPath(string filePath);
 
+    void createBasicEntity(const string &className, sf::Vector2f position, const string &path, entt::registry &registry);
+
     sf::Texture &getTextureFromPath(string filePath);
 
-    void createScene();
+    void createScene(entt::registry &registry);
 
-    void addPlayer(string filePath);
-    void addRaver(sf::Vector2f pos, string filePath);
+    void addPlayer(string filePath, entt::registry &registry);
+    void addRaver(sf::Vector2f pos, string filePath, entt::registry &registry);
 
 private:
-    EntityCreator(entt::registry &registry);
-
-    entt::registry &registry;
     using TextureResource = std::map<std::string, std::shared_ptr<sf::Texture>>;
     TextureResource textures;
 
-    entt::entity createHuman(sf::Vector2f pos, string filePath);
+    entt::entity createHuman(sf::Vector2f pos, string filePath, entt::registry &registry);
 };

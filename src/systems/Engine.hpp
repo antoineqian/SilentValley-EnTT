@@ -34,12 +34,10 @@ public:
         window.setFramerateLimit(60);
         drawSystems.emplace_back(make_unique<RenderSystem>());
         ItemManager::inst().init();
-        TmxWriter::inst().init();
+
+        EntityCreator::inst().createScene(registry);
         gui = make_unique<GUISystem>(registry, window);
 
-        EntityCreator::inst(registry).createScene();
-
-        // TmxWriter::test();
         update(window);
     }
 

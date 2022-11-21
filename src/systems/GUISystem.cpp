@@ -13,7 +13,7 @@ void GUISystem::handleEvent(sf::Event event)
 void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
 {
     // TODO: Verify that you don't click on the menu;
-    TmxWriter::inst().addObject(item->getName(), mousePos);
+    TmxWriter::inst().addObject(item->getName(), mousePos, registry);
     isItemSelected = false;
 }
 
@@ -50,7 +50,7 @@ void GUISystem::loadMenu(tgui::GuiBase &gui)
     for (auto &&item : items)
     {
         sf::Sprite sprite;
-        auto &texture = EntityCreator::inst(registry).getTextureFromPath(item->getPath());
+        auto &texture = EntityCreator::inst().getTextureFromPath(item->getPath());
         sprite.setTexture(texture);
         auto textureSize = texture.getSize();
         if (textureSize.x > displaySize.x && textureSize.y > displaySize.y)

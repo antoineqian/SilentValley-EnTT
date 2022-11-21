@@ -17,8 +17,5 @@ class EntityCreator;
 class TmxParser
 {
 public:
-    static void loadMap(string filepath, entt::registry &registry, EntityCreator &creator);
-
-    // private:
-    //     unique_ptr<const tmx::Tileset> objectTileSet = nullptr;
+    static void loadMap(string filepath, entt::registry &registry);
 };
