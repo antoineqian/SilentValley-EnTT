@@ -26,6 +26,7 @@ void TmxParser::loadMap(string filepath, entt::registry &registry, EntityCreator
         if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Object)
         {
             const auto &objectLayer = gameMap.getLayers()[i]->getLayerAs<tmx::ObjectGroup>();
+            std::cout << objectLayer.getObjects().size() << " sized\n";
             for (const auto &object : objectLayer.getObjects())
             {
                 auto entity = registry.create();

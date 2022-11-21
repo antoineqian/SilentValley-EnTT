@@ -52,6 +52,8 @@ public:
         // Display the updated graphics
         while (window.isOpen())
         {
+            // std::cout << sf::Mouse::getPosition(window).x << " " << sf::Mouse::getPosition(window).y << " relative to window\n";
+            // std::cout << sf::Mouse::getPosition().x << " " << sf::Mouse::getPosition().y << "\n";
             window.clear(sf::Color::Black);
             sf::Event event;
 

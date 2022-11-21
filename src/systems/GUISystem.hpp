@@ -18,6 +18,7 @@ public:
 
 private:
     entt::registry &registry;
+    sf::RenderWindow &window;
     tgui::GuiSFML gui;
     void loadMenu(tgui::GuiBase &gui);
     void speakerUpdate();

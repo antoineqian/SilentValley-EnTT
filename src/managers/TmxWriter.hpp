@@ -14,6 +14,7 @@ public:
         static TmxWriter mgr;
         return mgr;
     }
+
     void init()
     {
     }
@@ -42,11 +43,17 @@ private:
     {
         map.load_file("assets/map/mainMap.tmx");
         objectgroup = TmxWriter::map.child("map").child("objectgroup");
-        // lastId = reinterpret_cast<int>(objectgroup.last_child().attribute("id").value());
-        // std::cout << "Last object id: " << objectgroup.last_child().attribute("id").value().as_utf8 << '\n';
+        lastId = objectgroup.last_child().attribute("id").as_uint();
+        objectIdOffset = map.child("map").find_child_by_attribute("tileset", "source", "Objects.tsx").attribute("firstgid").as_int();
+        std::cout << "Offset " << objectIdOffset << '\n';
+        objectsDoc.load_file("assets/map/Objects.tsx");
+        objectsDoc.child("tileset").child("tile");
     }
-    int objectIdOffset = 2701;
+
+    int objectIdOffset;
     pugi::xml_document map;
     pugi::xml_node objectgroup;
-    // int lastId;
+    pugi::xml_document objectsDoc;
+    pugi::xml_node all_objects;
+    int lastId;
 };

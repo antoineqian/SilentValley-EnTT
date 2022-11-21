@@ -6,7 +6,7 @@ void GUISystem::handleEvent(sf::Event event)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && isItemSelected)
     {
         auto ptr = selectedItem.lock();
-        placeItem(ptr, sf::Mouse::getPosition());
+        placeItem(ptr, sf::Mouse::getPosition(window));
     }
 }
 
@@ -94,7 +94,7 @@ void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
-GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : registry(registry), gui{window}
+GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : registry(registry), window(window), gui{window}
 {
     loadChatBox(gui);
     loadMenu(gui);
