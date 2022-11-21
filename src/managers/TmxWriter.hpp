@@ -28,7 +28,6 @@ private:
         objectgroup = TmxWriter::map.child("map").child("objectgroup");
         lastId = objectgroup.last_child().attribute("id").as_uint();
         objectIdOffset = map.child("map").find_child_by_attribute("tileset", "source", "Objects.tsx").attribute("firstgid").as_int();
-        std::cout << "Offset " << objectIdOffset << '\n';
         objectsDoc.load_file("assets/map/Objects.tsx");
         objectsDoc.child("tileset").child("tile");
     }
