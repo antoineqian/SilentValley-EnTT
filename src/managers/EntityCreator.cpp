@@ -13,14 +13,26 @@ void EntityCreator::addTextureFromPath(string filePath)
     textures.insert(std::make_pair(filePath, std::move(newTexture)));
 }
 
-void EntityCreator::createBasicEntity(const string &className, sf::Vector2f position, const string &path, entt::registry& registry)
+void EntityCreator::createBasicEntity(const string &className, sf::Vector2f position, const string &path, entt::registry &registry)
 {
+
     auto entity = registry.create();
     auto &sprite = registry.emplace<sf::Sprite>(entity, sf::Sprite());
     addTextureFromPath(path);
     sprite.setTexture(getTextureFromPath(path));
     sprite.setPosition(position.x, position.y);
+    registry.view<Collision>().each(
+        [&registry, &sprite, &entity](auto &collision)
+        {
+            auto &box = collision.hitBox;
+            if (box.intersects(shrinkToHitBox(sprite.getGlobalBounds())))
+            {
+                registry.destroy(entity);
+                throw "Cannot place entity on top of another entity";
+            }
+        });
     registry.emplace<Collision>(entity, shrinkToHitBox(sprite.getGlobalBounds()));
+
     if (className == string("Speaker"))
     {
         registry.emplace<Speaker>(entity);

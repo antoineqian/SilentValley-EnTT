@@ -13,8 +13,15 @@ void GUISystem::handleEvent(sf::Event event)
 void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
 {
     // TODO: Verify that you don't click on the menu;
-    TmxWriter::inst().addObject(item->getName(), mousePos, registry);
-    isItemSelected = false;
+    try
+    {
+        TmxWriter::inst().addObject(item->getName(), mousePos, registry);
+        isItemSelected = false;
+    }
+    catch (const char *exception)
+    {
+        std::cout << exception << '\n';
+    }
 }
 
 void loadChatBox(tgui::GuiBase &gui)
