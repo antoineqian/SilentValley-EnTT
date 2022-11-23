@@ -62,8 +62,8 @@ void GUISystem::loadMusicMenu(tgui::GuiBase &gui)
     listBox->addItem("Item 1");
     listBox->addItem("Item 2");
     listBox->addItem("Item 3");
-    listBox->onDoubleClick([this]()
-                           { engine->onSongSelect("dummy text"); });
+    listBox->onDoubleClick([this, listBox](size_t index)
+                           { engine->onSongSelect(static_cast<sf::String>(listBox->getItemByIndex(index)).toAnsiString()); });
     gui.add(listBox);
 }
 
