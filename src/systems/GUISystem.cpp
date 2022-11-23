@@ -28,7 +28,7 @@ void GUISystem::loadItemMenu(tgui::GuiBase &gui)
     menu->setPosition(0, 100);
     menu->setTitle("Item menu");
 
-    auto items = ItemManager::inst().getAvailableItems();
+    auto items = DataBase::inst().getAvailableItems();
     int index = 0;
     for (auto &&item : items)
     {
@@ -53,7 +53,7 @@ void GUISystem::loadItemMenu(tgui::GuiBase &gui)
 
 void GUISystem::loadMusicMenu(tgui::GuiBase &gui)
 {
-    // auto musicFiles = ItemManager::inst().getMusicFiles();
+    // auto musicFiles = DataBase::inst().getMusicFiles();
     auto listBox = tgui::ListBox::create();
     listBox->setRenderer(theme.getRenderer("ListBox"));
     listBox->setSize(250, 120);

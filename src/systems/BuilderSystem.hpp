@@ -2,7 +2,7 @@
 #include "ISystem.hpp"
 #include "../managers/TmxWriter.hpp"
 #include "../components/Message.hpp"
-#include "../managers/ItemManager.hpp"
+#include "../managers/DataBase.hpp"
 #include <sstream>
 using std::ostringstream;
 

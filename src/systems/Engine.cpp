@@ -16,7 +16,7 @@ void Engine::activate()
     // This allows other processes to run and reduces power consumption
     window.setFramerateLimit(60);
     drawSystems.emplace_back(make_unique<RenderSystem>());
-    ItemManager::inst().init();
+    DataBase::inst().init();
     EntityCreator::inst().createScene(registry);
 
     gui = make_unique<GUISystem>(registry, window, getptr());

@@ -3,15 +3,15 @@
 #include <fstream>
 #include <memory>
 
-class ItemManager
+class DataBase
 {
 private:
     std::vector<std::shared_ptr<const Item>> availableItems;
 
 public:
-    static ItemManager &inst()
+    static DataBase &inst()
     {
-        static ItemManager mgr;
+        static DataBase mgr;
         return mgr;
     }
     void init()
@@ -30,6 +30,7 @@ public:
             }
         }
     }
+
     std::vector<std::shared_ptr<const Item>> getAvailableItems()
     {
         return availableItems;

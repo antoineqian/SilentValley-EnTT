@@ -13,7 +13,7 @@
 #include "GUISystem.hpp"
 #include "MovingSystem.hpp"
 #include "../managers/EntityCreator.hpp"
-#include "../managers/ItemManager.hpp"
+#include "../managers/DataBase.hpp"
 #include "../managers/TmxWriter.hpp"
 using std::make_shared;
 using std::make_unique;
