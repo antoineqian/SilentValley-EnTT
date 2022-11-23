@@ -12,6 +12,6 @@
 
 class PlayerControlSystem : public IUpdateSystem
 {
-    void update(entt::registry &registry) override;
+    void update(entt::registry &registry, sf::RenderWindow &window) override;
     sf::Clock actionTimer;
 };

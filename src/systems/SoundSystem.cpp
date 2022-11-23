@@ -17,18 +17,16 @@ void SoundSystem::switchSoundSystem()
         {
             if (system.isActive && !jukebox.playing())
             {
-                std::cout << "Play\n";
                 jukebox.play();
             }
             else if (!system.isActive && jukebox.playing())
             {
-                std::cout << "Stop\n";
                 jukebox.stop();
             }
         });
 }
 
-void SoundSystem::update(entt::registry &registry)
+void SoundSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     jukebox.update();
 }

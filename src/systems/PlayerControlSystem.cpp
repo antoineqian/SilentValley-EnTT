@@ -4,7 +4,7 @@
 
 sf::Vector2f processVelocity();
 
-void PlayerControlSystem::update(entt::registry &registry)
+void PlayerControlSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     // Keyboard
     // Direction
@@ -66,15 +66,6 @@ void PlayerControlSystem::update(entt::registry &registry)
                             break;
                         }
                     }
-
-                    // registry.view<Speaker, Collision>().each(
-                    //     [&useSpeakers, &faceBox](auto &speaker, auto &collision2)
-                    //     {
-                    //         if (faceBox.intersects(collision2.hitBox))
-                    //         {
-                    //             useSpeakers = true;
-                    //         }
-                    //     });
                 }
             });
 

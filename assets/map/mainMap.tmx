@@ -69,5 +69,10 @@
 		<object id="52" gid="2702" x="620" y="166" width="16" height="32" />
 		<object id="53" gid="2702" x="546" y="74" width="16" height="32" />
 		<object id="54" gid="2704" x="622" y="58" width="32" height="48" />
+		<object id="55" gid="2701" x="368" y="66" width="32" height="32" />
+		<object id="56" gid="2701" x="758" y="292" width="32" height="32" />
+		<object id="57" gid="2701" x="432" y="98" width="32" height="32" />
+		<object id="58" gid="2701" x="368" y="220" width="32" height="32" />
+		<object id="59" gid="2703" x="700" y="428" width="64" height="64" />
 	</objectgroup>
 </map>

@@ -3,7 +3,7 @@
 #include <iostream>
 using std::cout;
 
-void CollisionSystem::update(entt::registry &registry)
+void CollisionSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     registry.view<Collision, Animated>().each(
         [&registry](auto entity1, auto &collision1, auto &animated1)

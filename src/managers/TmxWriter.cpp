@@ -23,6 +23,7 @@ void TmxWriter::addObject(const string &name, sf::Vector2i position, entt::regis
 
     try
     {
+        // TODO: Fix hardcoded object class
         EntityCreator::inst().createBasicEntity("Object", sf::Vector2f(position.x, position.y), string("assets/map/" + sourcePath), registry);
         map.save_file("assets/map/mainMap.tmx");
         std::cout

@@ -35,7 +35,7 @@ void RaverSystem::IdleFromToGoDance()
     }
 }
 
-void RaverSystem::update(entt::registry &registry)
+void RaverSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     auto frameTime = frameClock.restart().asSeconds() / 60;
 

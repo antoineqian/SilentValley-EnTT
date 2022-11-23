@@ -7,5 +7,5 @@
 class AnimationSystem : public IUpdateSystem
 {
     sf::Clock frameClock;
-    void update(entt::registry &registry) override;
+    void update(entt::registry &registry, sf::RenderWindow &window) override;
 };

@@ -8,6 +8,7 @@ void Engine::activate()
     updateSystems.emplace_back(make_shared<RaverSystem>(registry)); // RaverSystem after MovingSystem to override with state-specific animations
     updateSystems.emplace_back(make_shared<CollisionSystem>());     // CollisionSystem after MovingSystem to update Collision
     updateSystems.emplace_back(make_shared<AnimationSystem>());     // AnimationSystem after Raver/Moving system to play according animation
+    updateSystems.emplace_back(make_shared<BuilderSystem>());
 
     sf::RenderWindow window{{WINDOW_WIDTH, WINDOW_HEIGHT},
                             "Silent Valley Game"};
@@ -49,7 +50,7 @@ void Engine::update(sf::RenderWindow &window)
 
         for (auto &sys : updateSystems)
         {
-            sys->update(registry);
+            sys->update(registry, window);
         }
 
         for (auto &sys : drawSystems)
@@ -82,4 +83,11 @@ void Engine::onSongSelect(const string &songName)
 {
     auto soundSystem = dynamic_pointer_cast<SoundSystem>(get<SoundSystem>());
     soundSystem->select(songName);
+}
+
+void Engine::onItemSelect(shared_ptr<const Item> item)
+{
+    auto builderSystem = dynamic_pointer_cast<BuilderSystem>(get<BuilderSystem>());
+    builderSystem->setItem(item);
+    std::cout << item->getName() << " selected\n";
 }

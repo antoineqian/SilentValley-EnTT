@@ -9,7 +9,7 @@ class SoundSystem : public IUpdateSystem
 {
 public:
     SoundSystem(entt::registry &registry);
-    void update(entt::registry &registry) override;
+    void update(entt::registry &registry, sf::RenderWindow &window) override;
     static sf::FloatRect soundArea(entt::registry &registry);
     void select(const string& songName);
 

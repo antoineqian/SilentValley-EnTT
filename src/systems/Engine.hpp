@@ -9,6 +9,7 @@
 #include "AnimationSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "SoundSystem.hpp"
+#include "BuilderSystem.hpp"
 #include "GUISystem.hpp"
 #include "MovingSystem.hpp"
 #include "../managers/EntityCreator.hpp"
@@ -31,7 +32,7 @@ public:
     shared_ptr<IUpdateSystem> get();
 
     void onSongSelect(const string &songName);
-
+    void onItemSelect(shared_ptr<const Item> item);
     std::shared_ptr<Engine> getptr();
 
     [[nodiscard]] static std::shared_ptr<Engine> create()

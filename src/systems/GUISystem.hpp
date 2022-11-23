@@ -6,10 +6,7 @@
 #include "../components/state/RaverStates.hpp"
 #include "../managers/EntityCreator.hpp"
 #include "../managers/ItemManager.hpp"
-#include "../managers/TmxWriter.hpp"
 #include "Engine.hpp"
-#include <sstream>
-using std::ostringstream;
 
 class Engine;
 
@@ -23,7 +20,6 @@ public:
 private:
     tgui::Theme theme;
     entt::registry &registry;
-    sf::RenderWindow &window;
     tgui::GuiSFML gui;
     shared_ptr<Engine> engine;
 
@@ -33,8 +29,5 @@ private:
 
     void speakerUpdate();
     void onGoDanceConstruct(entt::registry &registry, entt::entity entity);
-
-    bool isItemSelected = false;
-    std::weak_ptr<const Item> selectedItem;
-    void placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos);
+    void onMessage(entt::registry &registry, entt::entity entity);
 };

@@ -3,32 +3,6 @@
 void GUISystem::handleEvent(sf::Event event)
 {
     gui.handleEvent(event);
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && isItemSelected)
-    {
-        auto mousePos = sf::Mouse::getPosition(window);
-        if (mousePos.x < 0 || mousePos.x > WINDOW_WIDTH || mousePos.y < 0 || mousePos.y > WINDOW_HEIGHT)
-            return;
-        auto ptr = selectedItem.lock();
-        placeItem(ptr, mousePos);
-    }
-}
-
-void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
-{
-    // TODO: Bug with the position when the window is moved
-    // TODO: Verify that you don't click on the menu;
-    try
-    {
-        TmxWriter::inst().addObject(item->getName(), mousePos, registry);
-        isItemSelected = false;
-        ostringstream oss;
-        oss << item->getName() << " added!";
-        gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
-    }
-    catch (const char *exception)
-    {
-        gui.get<tgui::ChatBox>("InfoBox")->addLine(exception);
-    }
 }
 
 void GUISystem::loadChatBox(tgui::GuiBase &gui)
@@ -69,13 +43,8 @@ void GUISystem::loadItemMenu(tgui::GuiBase &gui)
         canvas->clear();
         canvas->draw(sprite);
         canvas->display();
-        canvas->onClick(
-            [this](shared_ptr<const Item> item)
-            {
-                this->isItemSelected = true;
-                this->selectedItem = item;
-            std::cout << item->getName() << " selected\n"; },
-            item);
+        canvas->onClick([this, item]()
+                        { engine->onItemSelect(item); });
         menu->add(canvas);
         index++;
     }
@@ -115,8 +84,14 @@ void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
+void GUISystem::onMessage(entt::registry &registry, entt::entity entity)
+{
+    auto message = registry.get<Message>(entity).message;
+    gui.get<tgui::ChatBox>("InfoBox")->addLine(message);
+}
+
 GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window, shared_ptr<Engine> engine)
-    : registry(registry), window(window), gui{window}, engine(engine)
+    : registry(registry), gui{window}, engine(engine)
 {
     theme.load("assets/gui/TransparentGrey.txt");
 
@@ -125,6 +100,7 @@ GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window, shared_
     loadMusicMenu(gui);
     registry.on_update<SoundRig>().connect<&GUISystem::speakerUpdate>(this);
     registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
+    registry.on_destroy<Message>().connect<&GUISystem::onMessage>(this);
 }
 
 void GUISystem::draw(entt::registry &registry, sf::RenderWindow &window)
