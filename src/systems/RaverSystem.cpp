@@ -3,7 +3,7 @@
 
 RaverSystem::RaverSystem(entt::registry &registry) : registry(registry)
 {
-    registry.on_update<Speaker>().connect<&RaverSystem::IdleFromToGoDance>(this);
+    registry.on_update<SoundRig>().connect<&RaverSystem::IdleFromToGoDance>(this);
 }
 
 template <typename T, typename U>

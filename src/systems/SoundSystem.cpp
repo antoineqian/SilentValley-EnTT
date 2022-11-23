@@ -1,5 +1,4 @@
 #include "SoundSystem.hpp"
-
 #include <iostream>
 
 SoundSystem::SoundSystem(entt::registry &registry) : jukebox("assets/sounds"), registry(registry)
@@ -38,4 +37,9 @@ sf::FloatRect SoundSystem::soundArea(entt::registry &registry)
 {
     // TODO: Calculate area
     return sf::FloatRect{483, 281, 173, 91};
+}
+
+void SoundSystem::select(const string &songName)
+{
+    std::cout << "Selected " << songName << '\n';
 }

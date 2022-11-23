@@ -31,11 +31,8 @@ void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
     }
 }
 
-void loadChatBox(tgui::GuiBase &gui)
+void GUISystem::loadChatBox(tgui::GuiBase &gui)
 {
-    tgui::Theme theme;
-    theme.load("assets/gui/TransparentGrey.txt");
-
     auto chatbox = tgui::ChatBox::create();
     chatbox->setRenderer(theme.getRenderer("ChatBox"));
     chatbox->setSize(300, 100);
@@ -46,18 +43,16 @@ void loadChatBox(tgui::GuiBase &gui)
     gui.add(chatbox, "InfoBox");
 }
 
-void GUISystem::loadMenu(tgui::GuiBase &gui)
+void GUISystem::loadItemMenu(tgui::GuiBase &gui)
 {
     int numCols = 5;
     auto displaySize = sf::Vector2f(32, 32);
 
-    tgui::Theme theme;
-    theme.load("assets/gui/TransparentGrey.txt");
     auto menu = tgui::ChildWindow::create();
     menu->setRenderer(theme.getRenderer("ChildWindow"));
     menu->setClientSize({250, 120});
     menu->setPosition(0, 100);
-    menu->setTitle("Item window");
+    menu->setTitle("Item menu");
 
     auto items = ItemManager::inst().getAvailableItems();
     int index = 0;
@@ -87,6 +82,22 @@ void GUISystem::loadMenu(tgui::GuiBase &gui)
     gui.add(menu);
 }
 
+void GUISystem::loadMusicMenu(tgui::GuiBase &gui)
+{
+    // auto musicFiles = ItemManager::inst().getMusicFiles();
+    auto listBox = tgui::ListBox::create();
+    listBox->setRenderer(theme.getRenderer("ListBox"));
+    listBox->setSize(250, 120);
+    listBox->setItemHeight(24);
+    listBox->setPosition(10, 340);
+    listBox->addItem("Item 1");
+    listBox->addItem("Item 2");
+    listBox->addItem("Item 3");
+    listBox->onDoubleClick([this]()
+                           { engine->onSongSelect("dummy text"); });
+    gui.add(listBox);
+}
+
 void GUISystem::speakerUpdate()
 {
     auto rig = registry.view<SoundRig>().begin();
@@ -104,11 +115,15 @@ void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
-GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : registry(registry), window(window), gui{window}
+GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window, shared_ptr<Engine> engine)
+    : registry(registry), window(window), gui{window}, engine(engine)
 {
+    theme.load("assets/gui/TransparentGrey.txt");
+
     loadChatBox(gui);
-    loadMenu(gui);
-    registry.on_update<Speaker>().connect<&GUISystem::speakerUpdate>(this);
+    loadItemMenu(gui);
+    loadMusicMenu(gui);
+    registry.on_update<SoundRig>().connect<&GUISystem::speakerUpdate>(this);
     registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
 }
 
