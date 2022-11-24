@@ -1,8 +1,7 @@
 #include "systems/Engine.hpp"
-
 int main()
 {
-    Engine engine;
-    engine.activate();
+    auto engine = Engine::create();
+    engine->activate();
     return 0;
 }

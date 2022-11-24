@@ -2,9 +2,8 @@
 #include <iostream>
 
 RaverSystem::RaverSystem(entt::registry &registry) : registry(registry)
-
 {
-    registry.on_update<Speaker>().connect<&RaverSystem::IdleFromToGoDance>(this);
+    registry.on_update<SoundRig>().connect<&RaverSystem::IdleFromToGoDance>(this);
 }
 
 template <typename T, typename U>
@@ -18,9 +17,9 @@ void switchState(const entt::entity &entity, entt::registry &registry)
 
 void RaverSystem::IdleFromToGoDance()
 {
-    auto aSpeaker = registry.view<Speaker>().begin();
-    bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
-    if (speakerOn)
+    auto rig = registry.view<SoundRig>().begin();
+    bool speakersOn = registry.get<SoundRig>(*rig).isActive;
+    if (speakersOn)
     {
         for (auto &&entity : registry.view<Raver, Idle>())
         {
@@ -36,7 +35,7 @@ void RaverSystem::IdleFromToGoDance()
     }
 }
 
-void RaverSystem::update(entt::registry &registry)
+void RaverSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     auto frameTime = frameClock.restart().asSeconds() / 60;
 
@@ -47,12 +46,10 @@ void RaverSystem::update(entt::registry &registry)
         raver.thirst -= frameTime;
         if (raver.thirst > 0)
         {
-            std::cout << raver.thirst << "\n";
             GoDance::execute(entity, registry);
         }
         else
         {
-            std::cout << raver.thirst << "\n";
             switchState<GoDance, GoDrink>(entity, registry);
         }
     };

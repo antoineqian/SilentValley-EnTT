@@ -4,7 +4,7 @@
 class IUpdateSystem
 {
 public:
-	virtual void update(entt::registry &registry) = 0;
+	virtual void update(entt::registry &registry, sf::RenderWindow &window) = 0;
 	virtual ~IUpdateSystem(){};
 };
 

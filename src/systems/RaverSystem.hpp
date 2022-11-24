@@ -9,11 +9,10 @@ class RaverSystem : public IUpdateSystem
 {
 public:
     RaverSystem(entt::registry &registry);
-    void update(entt::registry &registry) override;
+    void update(entt::registry &registry, sf::RenderWindow &window) override;
 
 private:
     void IdleFromToGoDance();
     entt::registry &registry;
     sf::Clock frameClock;
-
 };

@@ -6,5 +6,5 @@
 
 class CollisionSystem : public IUpdateSystem
 {
-    void update(entt::registry &registry) override;
+    void update(entt::registry &registry, sf::RenderWindow &window) override;
 };

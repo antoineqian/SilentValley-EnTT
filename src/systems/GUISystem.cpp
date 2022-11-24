@@ -1,41 +1,14 @@
 #include "GUISystem.hpp"
+#include <locale>
+#include <codecvt>
 
 void GUISystem::handleEvent(sf::Event event)
 {
     gui.handleEvent(event);
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && isItemSelected)
-    {
-        auto mousePos = sf::Mouse::getPosition(window);
-        if (mousePos.x < 0 || mousePos.x > WINDOW_WIDTH || mousePos.y < 0 || mousePos.y > WINDOW_HEIGHT)
-            return;
-        auto ptr = selectedItem.lock();
-        placeItem(ptr, mousePos);
-    }
 }
 
-void GUISystem::placeItem(shared_ptr<const Item> item, sf::Vector2i mousePos)
+void GUISystem::loadChatBox(tgui::GuiBase &gui)
 {
-    // TODO: Bug with the position when the window is moved
-    // TODO: Verify that you don't click on the menu;
-    try
-    {
-        TmxWriter::inst().addObject(item->getName(), mousePos, registry);
-        isItemSelected = false;
-        ostringstream oss;
-        oss << item->getName() << " added!";
-        gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
-    }
-    catch (const char *exception)
-    {
-        gui.get<tgui::ChatBox>("InfoBox")->addLine(exception);
-    }
-}
-
-void loadChatBox(tgui::GuiBase &gui)
-{
-    tgui::Theme theme;
-    theme.load("assets/gui/TransparentGrey.txt");
-
     auto chatbox = tgui::ChatBox::create();
     chatbox->setRenderer(theme.getRenderer("ChatBox"));
     chatbox->setSize(300, 100);
@@ -46,20 +19,18 @@ void loadChatBox(tgui::GuiBase &gui)
     gui.add(chatbox, "InfoBox");
 }
 
-void GUISystem::loadMenu(tgui::GuiBase &gui)
+void GUISystem::loadItemMenu(tgui::GuiBase &gui)
 {
     int numCols = 5;
     auto displaySize = sf::Vector2f(32, 32);
 
-    tgui::Theme theme;
-    theme.load("assets/gui/TransparentGrey.txt");
     auto menu = tgui::ChildWindow::create();
     menu->setRenderer(theme.getRenderer("ChildWindow"));
     menu->setClientSize({250, 120});
     menu->setPosition(0, 100);
-    menu->setTitle("Item window");
+    menu->setTitle("Item menu");
 
-    auto items = ItemManager::inst().getAvailableItems();
+    auto items = DataBase::inst().getAvailableItems();
     int index = 0;
     for (auto &&item : items)
     {
@@ -74,48 +45,73 @@ void GUISystem::loadMenu(tgui::GuiBase &gui)
         canvas->clear();
         canvas->draw(sprite);
         canvas->display();
-        canvas->onClick(
-            [this](shared_ptr<const Item> item)
-            {
-                this->isItemSelected = true;
-                this->selectedItem = item;
-            std::cout << item->getName() << " selected\n"; },
-            item);
+        canvas->onClick([this, item]()
+                        { engine->onItemSelect(item); });
         menu->add(canvas);
         index++;
     }
-
     gui.add(menu);
+}
+
+void GUISystem::loadMusicMenu(tgui::GuiBase &gui)
+{
+    auto catalog = DataBase::inst().getCatalog();
+    auto listBox = tgui::ListBox::create();
+    listBox->setRenderer(theme.getRenderer("ListBox"));
+    listBox->setSize(250, 120);
+    listBox->setItemHeight(24);
+    listBox->setPosition(10, 340);
+
+    using convert_type = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_type, wchar_t> converter;
+    for (auto song : catalog)
+    {
+        listBox->addItem(song);
+    }
+    listBox->onDoubleClick(
+        [this, listBox](size_t index)
+        {
+            std::wstring_convert<convert_type, wchar_t> converter;
+            std::string converted = converter.to_bytes(static_cast<sf::String>(listBox->getItemByIndex(index)).toWideString());
+            engine->onSongSelect(index, converted);
+        });
+    gui.add(listBox);
 }
 
 void GUISystem::speakerUpdate()
 {
-    std::cout << "onSpeaker\n";
-
-    auto aSpeaker = registry.view<Speaker>().begin();
-    bool speakerOn = registry.get<Speaker>(*aSpeaker).isActive;
+    auto rig = registry.view<SoundRig>().begin();
+    bool speakersOn = registry.get<SoundRig>(*rig).isActive;
     ostringstream oss;
-    oss << "Speakers " << (speakerOn ? "" : "de") << "activated!";
+    oss << "Speakers " << (speakersOn ? "" : "de") << "activated!";
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
 void GUISystem::onGoDanceConstruct(entt::registry &registry, entt::entity entity)
 {
-    std::cout << "onGoDance\n";
     auto name = registry.get<Raver>(entity).name;
     ostringstream oss;
-    oss << name << "is going to dance!";
+    oss << name << " is going to dance!";
     gui.get<tgui::ChatBox>("InfoBox")->addLine(oss.str());
 }
 
-GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window) : registry(registry), window(window), gui{window}
+void GUISystem::onMessage(entt::registry &registry, entt::entity entity)
 {
+    auto message = registry.get<Message>(entity).message;
+    gui.get<tgui::ChatBox>("InfoBox")->addLine(message);
+}
+
+GUISystem::GUISystem(entt::registry &registry, sf::RenderWindow &window, shared_ptr<Engine> engine)
+    : registry(registry), gui{window}, engine(engine)
+{
+    theme.load("assets/gui/TransparentGrey.txt");
+
     loadChatBox(gui);
-    loadMenu(gui);
-    // TODO: Create a global SoundSystem component upon which GoDance gets updated.
-    //  This way things get updated in the correct order.
+    loadItemMenu(gui);
+    loadMusicMenu(gui);
+    registry.on_update<SoundRig>().connect<&GUISystem::speakerUpdate>(this);
     registry.on_construct<GoDance>().connect<&GUISystem::onGoDanceConstruct>(this);
-    registry.on_update<Speaker>().connect<&GUISystem::speakerUpdate>(this);
+    registry.on_destroy<Message>().connect<&GUISystem::onMessage>(this);
 }
 
 void GUISystem::draw(entt::registry &registry, sf::RenderWindow &window)

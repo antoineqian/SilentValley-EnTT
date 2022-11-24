@@ -1,33 +1,44 @@
 #include "SoundSystem.hpp"
+#include <iostream>
 
-SoundSystem::SoundSystem(entt::registry &registry) : registry(registry)
+SoundSystem::SoundSystem(entt::registry &registry) : jukebox("assets/sounds"), registry(registry)
 {
+    jukebox.requestAll();
+    jukebox.setLooping(true);
     observer.connect(registry, entt::collector.update<Speaker>());
-    music.openFromFile("assets/sounds/08. Surrounded.flac");
-
-    registry.on_update<Speaker>().connect<&SoundSystem::switchSoundSystem>(this);
+    auto entity = registry.create();
+    registry.emplace<SoundRig>(entity);
+    registry.on_update<SoundRig>().connect<&SoundSystem::switchSoundSystem>(this);
 }
 
 void SoundSystem::switchSoundSystem()
 {
-    registry.view<Speaker>().each(
-        [this](auto &speaker)
+    registry.view<SoundRig>().each(
+        [this](auto &system)
         {
-            if (speaker.isActive && (music.getStatus() == sf::SoundSource::Status::Paused || music.getStatus() == sf::SoundSource::Status::Stopped))
+            if (system.isActive && !jukebox.playing())
             {
-                music.play();
+                jukebox.play();
             }
-            else if (!speaker.isActive && music.getStatus() == sf::SoundSource::Status::Playing)
+            else if (!system.isActive && jukebox.playing())
             {
-                music.pause();
+                jukebox.stop();
             }
         });
 }
-void SoundSystem::update(entt::registry &registry)
+
+void SoundSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
+    jukebox.update();
 }
 
 sf::FloatRect SoundSystem::soundArea(entt::registry &registry)
 {
+    // TODO: Calculate area
     return sf::FloatRect{483, 281, 173, 91};
+}
+
+void SoundSystem::select(size_t index, const string &songName)
+{
+    jukebox.skip(index);
 }

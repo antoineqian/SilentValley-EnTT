@@ -1,7 +1,7 @@
 #include "MovingSystem.hpp"
 #include <iostream>
 
-void MovingSystem::update(entt::registry &registry)
+void MovingSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     registry.view<Moving, Animated, Collision>().each(
         [](auto &moving, auto &animated, auto &collision)

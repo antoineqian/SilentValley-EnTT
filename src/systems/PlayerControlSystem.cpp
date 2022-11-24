@@ -4,7 +4,7 @@
 
 sf::Vector2f processVelocity();
 
-void PlayerControlSystem::update(entt::registry &registry)
+void PlayerControlSystem::update(entt::registry &registry, sf::RenderWindow &window)
 {
     // Keyboard
     // Direction
@@ -58,24 +58,24 @@ void PlayerControlSystem::update(entt::registry &registry)
                 if (spaceCmd)
                 {
                     auto faceBox = getFacePosition(collision.hitBox, moving.direction);
-                    registry.view<Speaker, Collision>().each(
-                        [&useSpeakers, &faceBox](auto &speaker, auto &collision2)
+                    for (auto &&entity : registry.view<Speaker, Collision>())
+                    {
+                        if (faceBox.intersects(registry.get<Collision>(entity).hitBox))
                         {
-                            if (faceBox.intersects(collision2.hitBox))
-                            {
-                                useSpeakers = true;
-                            }
-                        });
+                            useSpeakers = true;
+                            break;
+                        }
+                    }
                 }
             });
 
     if (useSpeakers)
     {
-        registry.view<Speaker>().each(
+        registry.view<SoundRig>().each(
             [&registry](auto entity, auto &speaker)
             {
-                registry.patch<Speaker>(entity, [](auto &speaker)
-                                        { speaker.isActive = !speaker.isActive; });
+                registry.patch<SoundRig>(entity, [](auto &system)
+                                         { system.isActive = !system.isActive; });
             });
     }
 }
