@@ -40,12 +40,5 @@ sf::FloatRect SoundSystem::soundArea(entt::registry &registry)
 
 void SoundSystem::select(size_t index, const string &songName)
 {
-    // TODO: Skip changes the playlist order
     jukebox.skip(index);
-    for (auto s : jukebox.playlist())
-    {
-        std::cout << s << '\n';
-    }
-    // jukebox.request(songName);
-    std::cout << "Selected " << songName << '\n';
 }

@@ -19,6 +19,12 @@
 //
 //    3. This notice may not be removed or altered from any source distribution.
 
+/*
+Modified by Antoine Qian:
+
+ - 24/11/2022: In skip, set m_current to n in looping mode
+*/
+
 #include "Jukebox.hpp"
 #include <errno.h>
 #include <string.h>
@@ -57,7 +63,6 @@ Jukebox::Jukebox(const std::string &dir)
             std::cerr << "Jukebox failed to add '" << path << "'" << std::endl;
             continue;
         }
-        std::cout << filename << " added\n";
         const auto inserted = m_catalog.emplace(filename, std::move(music));
         assert(inserted.second);
     }
@@ -118,14 +123,7 @@ void Jukebox::skip(int n)
 
     if (m_looping)
     {
-        if (n > 0)
-        {
-            m_current = (m_current + n) % m_playlist.size();
-        }
-        else
-        {
-            m_current = ((m_current + n) % m_playlist.size());
-        }
+        m_current = n % m_playlist.size();
     }
     else
     {
