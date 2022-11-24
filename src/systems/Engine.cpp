@@ -79,10 +79,10 @@ std::shared_ptr<Engine> Engine::getptr()
     return shared_from_this();
 }
 
-void Engine::onSongSelect(const string &songName)
+void Engine::onSongSelect(size_t index, const string &songName)
 {
     auto soundSystem = dynamic_pointer_cast<SoundSystem>(get<SoundSystem>());
-    soundSystem->select(songName);
+    soundSystem->select(index, songName);
 }
 
 void Engine::onItemSelect(shared_ptr<const Item> item)

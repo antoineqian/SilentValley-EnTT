@@ -124,7 +124,7 @@ void Jukebox::skip(int n)
         }
         else
         {
-            m_current = m_playlist.size() + ((m_current + n) % m_playlist.size());
+            m_current = ((m_current + n) % m_playlist.size());
         }
     }
     else

@@ -7,6 +7,7 @@ class DataBase
 {
 private:
     std::vector<std::shared_ptr<const Item>> availableItems;
+    std::vector<std::string> catalog;
 
 public:
     static DataBase &inst()
@@ -29,10 +30,16 @@ public:
                 availableItems.push_back(std::make_shared<Item>(price, name));
             }
         }
+        catalog = Jukebox("assets/sounds").catalog();
     }
 
     std::vector<std::shared_ptr<const Item>> getAvailableItems()
     {
         return availableItems;
     };
+
+    std::vector<std::string> getCatalog()
+    {
+        return catalog;
+    }
 };

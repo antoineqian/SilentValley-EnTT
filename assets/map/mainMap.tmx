@@ -74,5 +74,6 @@
 		<object id="57" gid="2701" x="432" y="98" width="32" height="32" />
 		<object id="58" gid="2701" x="368" y="220" width="32" height="32" />
 		<object id="59" gid="2703" x="700" y="428" width="64" height="64" />
+		<object id="60" gid="2701" x="698" y="76" width="32" height="32" />
 	</objectgroup>
 </map>

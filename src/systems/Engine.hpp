@@ -31,7 +31,7 @@ public:
     template <typename System>
     shared_ptr<IUpdateSystem> get();
 
-    void onSongSelect(const string &songName);
+    void onSongSelect(size_t index, const string &songName);
     void onItemSelect(shared_ptr<const Item> item);
     std::shared_ptr<Engine> getptr();
 

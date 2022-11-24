@@ -4,6 +4,7 @@
 SoundSystem::SoundSystem(entt::registry &registry) : jukebox("assets/sounds"), registry(registry)
 {
     jukebox.requestAll();
+    jukebox.setLooping(true);
     observer.connect(registry, entt::collector.update<Speaker>());
     auto entity = registry.create();
     registry.emplace<SoundRig>(entity);
@@ -37,7 +38,14 @@ sf::FloatRect SoundSystem::soundArea(entt::registry &registry)
     return sf::FloatRect{483, 281, 173, 91};
 }
 
-void SoundSystem::select(const string &songName)
+void SoundSystem::select(size_t index, const string &songName)
 {
+    // TODO: Skip changes the playlist order
+    jukebox.skip(index);
+    for (auto s : jukebox.playlist())
+    {
+        std::cout << s << '\n';
+    }
+    // jukebox.request(songName);
     std::cout << "Selected " << songName << '\n';
 }

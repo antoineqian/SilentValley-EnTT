@@ -11,7 +11,7 @@ public:
     SoundSystem(entt::registry &registry);
     void update(entt::registry &registry, sf::RenderWindow &window) override;
     static sf::FloatRect soundArea(entt::registry &registry);
-    void select(const string& songName);
+    void select(size_t index, const string &songName);
 
 private:
     Jukebox jukebox;

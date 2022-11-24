@@ -1,4 +1,6 @@
 #include "GUISystem.hpp"
+#include <locale>
+#include <codecvt>
 
 void GUISystem::handleEvent(sf::Event event)
 {
@@ -53,17 +55,26 @@ void GUISystem::loadItemMenu(tgui::GuiBase &gui)
 
 void GUISystem::loadMusicMenu(tgui::GuiBase &gui)
 {
-    // auto musicFiles = DataBase::inst().getMusicFiles();
+    auto catalog = DataBase::inst().getCatalog();
     auto listBox = tgui::ListBox::create();
     listBox->setRenderer(theme.getRenderer("ListBox"));
     listBox->setSize(250, 120);
     listBox->setItemHeight(24);
     listBox->setPosition(10, 340);
-    listBox->addItem("Item 1");
-    listBox->addItem("Item 2");
-    listBox->addItem("Item 3");
-    listBox->onDoubleClick([this, listBox](size_t index)
-                           { engine->onSongSelect(static_cast<sf::String>(listBox->getItemByIndex(index)).toAnsiString()); });
+
+    using convert_type = std::codecvt_utf8<wchar_t>;
+    std::wstring_convert<convert_type, wchar_t> converter;
+    for (auto song : catalog)
+    {
+        listBox->addItem(song);
+    }
+    listBox->onDoubleClick(
+        [this, listBox](size_t index)
+        {
+            std::wstring_convert<convert_type, wchar_t> converter;
+            std::string converted = converter.to_bytes(static_cast<sf::String>(listBox->getItemByIndex(index)).toWideString());
+            engine->onSongSelect(index, converted);
+        });
     gui.add(listBox);
 }
 
