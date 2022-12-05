@@ -4,7 +4,7 @@
 #include "SFML/Graphics.hpp"
 #include "../Animated.hpp"
 #include "../Moving.hpp"
-#include "entt.hpp"
+#include <entt/entt.hpp>
 #include "../../constants.hpp"
 #include "../Raver.hpp"
 #include "../../systems/SoundSystem.hpp"

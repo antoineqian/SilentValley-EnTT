@@ -3,7 +3,8 @@
 #include <string>
 #include <memory>
 #include <SFML/Graphics.hpp>
-#include <entt.hpp>
+#include <entt/entt.hpp>
+
 #include "ISystem.hpp"
 #include "../../external/Layer.hpp"
 #include "../components/Moving.hpp"

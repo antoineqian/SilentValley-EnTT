@@ -9,7 +9,6 @@ project(silentValley)
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS  src/*.cpp)
 
 add_library(silentValleyLib SHARED ${SRC_FILES})
-# add_subdirectory(./external/tmxlite/tmxlite/)
 
 CPMAddPackage(
     NAME magic_enum
@@ -42,6 +41,7 @@ target_include_directories(silentValleyLib PUBLIC
     ./external/tmxlite/tmxlite/include
     ./external/entt/src/entt/
     ./external/pugixml-1.13/src/
+    /usr/local/Cellar/entt/3.11.1/include
 )
 
 add_executable(silentValley src/main.cpp)

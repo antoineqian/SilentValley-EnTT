@@ -1,5 +1,5 @@
 #pragma once
-#include "entt.hpp"
+#include <entt/entt.hpp>
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include "ISystem.hpp"
