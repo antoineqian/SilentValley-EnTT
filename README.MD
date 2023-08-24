@@ -1,3 +1,7 @@
+# Silent Valley
+
+Silent Valley is a game made in C++. You can construct your own festival and play music in it. If your festival is a good one, people will come dance and have a good time.
+
 
 # Installation 
 
